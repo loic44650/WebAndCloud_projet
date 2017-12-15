@@ -18,12 +18,12 @@ public class ApiBackEnd {
 		return userAdded;
 	}
 	
-	@ApiMethod(name="addFollower",httpMethod="POST",path="users/{user}")
-	public User addFollow(@Named("user") Long roomId, User us1){
+	@ApiMethod(name="addFollower",httpMethod="POST",path="users/{idUser}")
+	public User addFollow(@Named("idUser") Long userId, User us1){
 		User usr;
 		try {
 			usr = (User) getPersistenceManager().getObjectById(User.class,
-					KeyFactory.createKey(User.class.getSimpleName(), roomId));
+					KeyFactory.createKey(User.class.getSimpleName(), idUser));
 			usr.addFollow(us1);
 		}
 		finally
