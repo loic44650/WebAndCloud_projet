@@ -1,4 +1,4 @@
-package wecloud;
+package tinyTwitt;
 
 import javax.jdo.annotations.*;
 

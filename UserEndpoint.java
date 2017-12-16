@@ -1,6 +1,6 @@
-package wecloud;
+package tinyTwitt;
 
-import wecloud.PMF;
+import tinyTwitt.PMF;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
