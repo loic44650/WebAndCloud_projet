@@ -41,6 +41,7 @@ public class ApiBackEnd {
 	public List<User> listUsers(){
 		PersistenceManager pm = getPersistenceManager();
 	    Query query = pm.newQuery(User.class);
+	    //
 	    return (List<User>) pm.newQuery(query).execute();
 	}
 
