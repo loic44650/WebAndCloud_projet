@@ -11,7 +11,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.datastore.KeyFactory;
 
 
-@Api(name = "tinytwitt",version="v1")
+@Api(name = "users",version="v1")
 public class ApiBackEnd {
 	
 	
@@ -44,7 +44,8 @@ public class ApiBackEnd {
 	    //
 	    return (List<User>) pm.newQuery(query).execute();
 	}
-
+	
+	
 	private static PersistenceManager getPersistenceManager() {
 		return PMF.get().getPersistenceManager();
 	}

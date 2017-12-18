@@ -1,42 +1,49 @@
-package tinyTwitt;
+package webcloud;
 
 import javax.jdo.annotations.*;
-
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class Message {
+	
 	@PrimaryKey
-	@Persistent(valueStrategy=IdGeneratorStrategy.SEQUENCE)
-	Key key;
+	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
+	private Key msgId;
+	
+
+	@Persistent
+	private Key userId;
 	
 	@Persistent
-	String message;
+	private String message;
 	
-	@Persistent
-	String sender;
-
 	/**
-	 * @return the id
+	 * @return the msgId
 	 */
-	public Long getId() {
-		return (key != null) ? key.getId() : -1;
+	public Key getMsgId() {
+		return msgId;
 	}
 
 	/**
-	 * @return the key
+	 * @param msgId the msgId to set
 	 */
-	public Key getKey() {
-		return key;
+	public void setMsgId(Key msgId) {
+		this.msgId = msgId;
 	}
 
 	/**
-	 * @param key the key to set
+	 * @return the userId
 	 */
-	public void setKey(Key key) {
-		this.key = key;
+	public Key getUserId() {
+		return userId;
 	}
 
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(Key userId) {
+		this.userId = userId;
+	}
 
 	/**
 	 * @return the message
@@ -50,20 +57,6 @@ public class Message {
 	 */
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	/**
-	 * @return the sender
-	 */
-	public String getSender() {
-		return sender;
-	}
-
-	/**
-	 * @param sender the sender to set
-	 */
-	public void setSender(String sender) {
-		this.sender = sender;
 	}
 
 	

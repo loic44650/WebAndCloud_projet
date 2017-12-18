@@ -1,11 +1,8 @@
 package webcloud;
 
 import java.util.List;
-
 import javax.jdo.annotations.*;
-
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.labs.*;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class User {
