@@ -25,8 +25,12 @@ public class ApiMsgs {
 	public List<Message> listMessages(){
 		PersistenceManager pm = getPersistenceManager();
 	    Query query = pm.newQuery(Message.class);
-	    //
 	    return (List<Message>) pm.newQuery(query).execute();
+	}
+	
+	@ApiMethod(name="getmytwitts",httpMethod="get",path="messagesIndex/userID")
+	public List<Message> getmytwitts(@Named("userId") Long id){
+		
 	}
 	
 	private static PersistenceManager getPersistenceManager() {
