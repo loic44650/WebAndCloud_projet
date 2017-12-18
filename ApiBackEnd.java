@@ -22,12 +22,15 @@ public class ApiBackEnd {
 	}
 	
 	@ApiMethod(name="addFollower",httpMethod="POST",path="users/{idUser}")
-	public User addFollow(@Named("idUser") Long userId,User us1){
-		User usr,user1;
+	public User addFollow(@Named("idUser") Long userId,@Named("followToAdd") Long us1){
+		User usr,usr1;
 		try {
 			usr = (User) getPersistenceManager().getObjectById(User.class,
 					KeyFactory.createKey(User.class.getSimpleName(), userId));
-			usr.addFollow(us1);
+			usr1 = (User) getPersistenceManager().getObjectById(User.class,
+					KeyFactory.createKey(User.class.getSimpleName(), us1)); 
+			usr1.addFollow(userId);
+			usr.ajoutMesFollow(us1);
 		}
 		finally
 		{
@@ -37,11 +40,10 @@ public class ApiBackEnd {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@ApiMethod(name="listUSers",httpMethod="get",path="users")
+	@ApiMethod(name="listUsers",httpMethod="get",path="users")
 	public List<User> listUsers(){
 		PersistenceManager pm = getPersistenceManager();
 	    Query query = pm.newQuery(User.class);
-	    //
 	    return (List<User>) pm.newQuery(query).execute();
 	}
 	

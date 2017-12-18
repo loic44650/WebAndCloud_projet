@@ -16,8 +16,29 @@ public class User {
 	
 	@Persistent
 	@Element(dependent="true")
-	List<User> lesfollows;
-	List<User> mesFollowers;
+	List<Long> lesfollows;// les gens qui me follow
+	
+	@Persistent
+	List<Long> mesfollow;
+	
+	/**
+	 * @return the mesfollow
+	 */
+	public List<Long> getMesfollow() {
+		return mesfollow;
+	}
+
+	/**
+	 * @param mesfollow the mesfollow to set
+	 */
+	public void setMesfollow(List<Long> mesfollow) {
+		this.mesfollow = mesfollow;
+	}
+
+	public void ajoutMesFollow(Long e)
+	{
+		this.mesfollow.add(e);
+	}
 
 	/**
 	 * @return the key
@@ -53,18 +74,18 @@ public class User {
 	/**
 	 * @return the lesfollows
 	 */
-	public List<User> getLesfollows() {
+	public List<Long> getLesfollows() {
 		return lesfollows;
 	}
 
 	/**
 	 * @param lesfollows the lesfollows to set
 	 */
-	public void setLesfollows(List<User> lesfollows) {
+	public void setLesfollows(List<Long> lesfollows) {
 		this.lesfollows = lesfollows;
 	}
 	
-	public void addFollow(User e){
+	public void addFollow(Long e){
 		this.lesfollows.add(e);
 	}
 	
