@@ -12,7 +12,7 @@ public class Message {
 	
 
 	@Persistent
-	private Key userId;
+	private Long userId;
 	
 	@Persistent
 	private String message;
@@ -34,14 +34,14 @@ public class Message {
 	/**
 	 * @return the userId
 	 */
-	public Key getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 */
-	public void setUserId(Key userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
