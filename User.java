@@ -17,6 +17,7 @@ public class User {
 	@Persistent
 	@Element(dependent="true")
 	List<User> lesfollows;
+	List<User> mesFollowers;
 
 	/**
 	 * @return the key

@@ -1,6 +1,7 @@
 package webcloud;
 
 import javax.jdo.annotations.*;
+
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
@@ -56,6 +57,12 @@ public class Message {
 	 * @param message the message to set
 	 */
 	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public Message(Long userId, String message) {
+		super();
+		this.userId = userId;
 		this.message = message;
 	}
 
