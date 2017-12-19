@@ -23,22 +23,22 @@ public class ApiBackEnd {
 		return userAdded;
 	}
 	
-	@ApiMethod(name="addFollower",httpMethod="POST",path="users/{idUser}")
-	public User addFollow(@Named("idUser") Long userId,@Named("followToAdd") Long us1){
-		User usr,usr1;
+	@ApiMethod(name="addFollower",httpMethod="POST",path="users/{idUser}/addFollower")
+	public User addFollow(@Named("idUser") Long userId,@Named("aSuivre") Long user){
+		User usr,usrAsuivre;
 		try {
 			usr = (User) getPersistenceManager().getObjectById(User.class,
 					KeyFactory.createKey(User.class.getSimpleName(), userId));
-			usr1 = (User) getPersistenceManager().getObjectById(User.class,
-					KeyFactory.createKey(User.class.getSimpleName(), us1)); 
-			usr1.addFollow(userId);
-			usr.ajoutMesFollow(us1);
+			usrAsuivre = (User) getPersistenceManager().getObjectById(User.class,
+					KeyFactory.createKey(User.class.getSimpleName(), user)); 
+			usr.ajoutLesGensQueJeSuit(user);
+			usrAsuivre.ajoutLesGensQuiMeFollow(userId);
 		}
 		finally
 		{
 			getPersistenceManager().close();
 		}
-		return usr;
+		return usrAsuivre;
 	}
 	
 	@SuppressWarnings("unchecked")

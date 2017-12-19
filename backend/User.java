@@ -1,7 +1,6 @@
 package webcloud;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.jdo.annotations.*;
@@ -20,28 +19,29 @@ public class User {
 	
 	@Persistent
 	@Element(dependent="true")
-	Set<Long> lesfollows = new HashSet<Long>();// les gens qui me follow
+	Set<Long> lesGensQuiMeSuit = new HashSet<Long>();// les gens qui me follow
 	
 	@Persistent
-	Set<Long> mesfollow = new HashSet<Long>();
+	@Element(dependent="true")
+	Set<Long> lesGensQueJeSuit = new HashSet<Long>();
 	
 	/**
 	 * @return the mesfollow
 	 */
 	public Set<Long> getMesfollow() {
-		return mesfollow;
+		return lesGensQueJeSuit;
 	}
 
 	/**
 	 * @param mesfollow the mesfollow to set
 	 */
 	public void setMesfollow(Set<Long> mesfollow) {
-		this.mesfollow = mesfollow;
+		this.lesGensQueJeSuit = mesfollow;
 	}
 
-	public void ajoutMesFollow(Long e)
+	public void ajoutLesGensQueJeSuit(Long e)
 	{
-		this.mesfollow.add(e);
+		this.lesGensQueJeSuit.add(e);
 	}
 
 	/**
@@ -79,18 +79,18 @@ public class User {
 	 * @return the lesfollows
 	 */
 	public Set<Long> getLesfollows() {
-		return lesfollows;
+		return lesGensQuiMeSuit;
 	}
 
 	/**
 	 * @param lesfollows the lesfollows to set
 	 */
 	public void setLesfollows(Set<Long> lesfollows) {
-		this.lesfollows = lesfollows;
+		this.lesGensQuiMeSuit = lesfollows;
 	}
 	
-	public void addFollow(Long e){
-		this.lesfollows.add(e);
+	public void ajoutLesGensQuiMeFollow(Long e){
+		this.lesGensQuiMeSuit.add(e);
 	}
 	
 	
