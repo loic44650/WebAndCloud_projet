@@ -1,0 +1,38 @@
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img class="img-circle" src="./assets/dist/img/user.png">
+            </div>
+            <div class="pull-left info">
+                <p *ngIf="user">{{ user.username }}</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+        </div>
+        <!-- search form -->
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul *ngIf="!afficher" class="sidebar-menu">
+            <li class="header">Menu</li>
+            <li>
+                <a [routerLink]="['/dashboard']">
+                    <i class="fa fa-twitter-square"></i>
+                    <span>Les Twitts</span>
+
+                </a>
+            </li>
+            <li>
+              <a target="_blank" href="https://github.com/loic44650/WebAndCloud_projet">
+                <i class="fa fa-github-square"></i>
+                <span>Github</span>
+
+              </a>
+            </li>
+
+        </ul>
+
+    </section>
+</aside>

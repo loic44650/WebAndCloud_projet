@@ -1,0 +1,229 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Profile
+            <small>General Information</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li *ngIf="!afficher"><a [routerLink]="['/dashboard']"><i class="fa fa-dashboard"></i>Mon tableau de bord</a></li>
+            <li *ngIf="afficher"><a [routerLink]="['/dashboardPro']"><i class="fa fa-dashboard"></i>Mon tableau de bord</a></li>
+            <li class="active">Profile</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="col-md-9">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#settings" data-toggle="tab">Information</a></li>
+                    <li><a href="#timeline" data-toggle="tab">Adresse</a></li>
+                    <li><a href="#activity" data-toggle="tab">Changement de mot de passe</a></li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="active tab-pane" id="settings">
+
+                        <form class="form-horizontal" name="form" (ngSubmit)="f.form.valid" #f="ngForm">
+                            <!-- Modal -->
+                            <div class="modal fade" id="confirm-password-profile" role="dialog">
+                                <form class="form-horizontal"  name="formModal" (ngSubmit)="f.form.valid &&  fmodal.form.valid && updateInfo()" #fmodal="ngForm">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Modifier votre profile</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group" >
+                                                    <div class="col-sm-10">
+                                                        <input type="password" class="form-control pwd" placeholder="Saisissez mot de passe actuelle" name="plainPassword"  [(ngModel)]="model.plainPassword" required value={{model.plainPassword}} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="col-xs-6 col-sm-4 col-md-4">
+                                                    <button (click)="updateInfo()" type="submit"  class="btn btn-default" data-dismiss="modal">Modifier</button>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-4 col-md-4 col-sm-offset-4 col-md-offset-4">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <img width="100px" class="thumbnail img-responsive" *ngIf="infoUser.img !== null && infoUser.img" alt="{{infoUser.img.alt}}" src="http://datagrowb.com/ShopAssist/web/uploads/img/{{infoUser.img.path}}">
+                                    <img width="100px" class="thumbnail img-responsive" *ngIf="!infoUser.img" src="./assets/dist/img/user.png">
+                                    <a data-toggle="modal" data-target="#edit-profile" href="#" class="edit-profile"><i class="glyphicon glyphicon-edit"></i></a>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="edit-profile" role="dialog">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title">Modifier votre profile</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input type="file" name="file" id="exampleInputFile" #file  (change)="fileChange($event)"  accept=".jpg,.jpeg,.png" >
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="col-xs-6 col-sm-4 col-md-4">
+                                                        <button (click)="editProfile()" type="button" class="btn btn-default" data-dismiss="modal">Modifier</button>
+                                                    </div>
+                                                    <div class="col-xs-6 col-sm-4 col-md-4 col-sm-offset-4 col-md-offset-4">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Votre pseudo</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="username"   [(ngModel)]="model.username" #username="ngModel" value={{infoUser.username}} id="username" readonly/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">Email</label>
+
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" name="email" placeholder={{infoUser.email}} [(ngModel)]="model.email" #email="ngModel" id="email"  value={{infoUser.email}} readonly />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prenom" class="col-sm-2 control-label">Prénom</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" name="lastName" class="form-control"  placeholder="{{infoUser.lastName}}" [(ngModel)]="model.lastName" #lastName="ngModel" id="prenom" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">Nom</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="name" class="form-control" placeholder="{{infoUser.name}}" [(ngModel)]="model.name" #name="ngModel" id="name" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phoneNumber" class="col-sm-2 control-label">Telephone</label>
+
+                                <div class="col-sm-10">
+                                    <input type="tel" class="form-control"  placeholder="{{infoUser.phoneNumber}}" name="phoneNumber" [(ngModel)]="model.phoneNumber" #phoneNumber="ngModel" id="phoneNumber"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button data-toggle="modal" data-target="#confirm-password-profile" class="btn btn-danger">Submit</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div class="tab-pane" id="timeline">
+                      <form class="form-horizontal" name="formAdresse" (ngSubmit)="fAdress.form.valid && updateAdress()" #fAdress="ngForm">
+                        <div class="form-group">
+                          <label for="number" class="col-sm-2 control-label">Numero</label>
+
+                          <div class="col-sm-10">
+                            <input  type="text" name="number" class="form-control"  #number="ngModel" [(ngModel)]="adress.number" id="number"  value = {{adress.number}} />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="street" class="col-sm-2 control-label">Rue</label>
+
+                          <div class="col-sm-10">
+                            <input *ngIf="adress" type="text" name="rue" class="form-control" #street="ngModel" [(ngModel)]="adress.street" id="street"  value = {{adress.street}} />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="zipCode" class="col-sm-2 control-label">Code Postale</label>
+
+                          <div class="col-sm-10">
+                            <input *ngIf="adress" type="text" name="zipCode" class="form-control" #zipCode="ngModel" [(ngModel)]="adress.zipCode" id="zipCode" value={{adress.zipCode}}  />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="country" class="col-sm-2 control-label">Ville</label>
+
+                          <div class="col-sm-10">
+                            <input *ngIf="adress" type="text" name="country" class="form-control" #country="ngModel" [(ngModel)]="adress.country" id="country" value={{adress.country}} />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10">
+                            <button data-toggle="modal" data-target="#confirm-password-adress"  class="btn btn-danger">Submit</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+
+                    <div class="tab-pane" id="activity">
+                      <div *ngIf="error" class="alert alert-warning">
+                        <p>{{error}}</p>
+                      </div>
+                      <form class="form-horizontal" name="formPass" (ngSubmit)="fpass.form.valid && updatePassword()" #fpass="ngForm">
+                        <div class="form-group">
+                          <label for="lastPassword" class="col-sm-2 control-label">
+                            Ancien Mot de passe
+                          </label>
+                          <div class="col-sm-10">
+                            <input type="password" class="form-control" id="lastPassword" placeholder="Nouvelle mot de passe" name="lastPassword" [(ngModel)]="modelPassword.lastPassword" #lastPassword="ngModel" required />
+                            <div *ngIf="fpass.submitted && !lastPassword.valid">
+                              Mot de passe est obligatoire
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group" >
+                          <label for="newPassword" class="col-sm-2 control-label">
+                            Mot de passe :
+                          </label>
+
+                          <div class="col-sm-10">
+                            <input type="password" class="form-control" id="newPassword" placeholder="Nouvelle mot de passe" name="newPassword" [(ngModel)]="modelPassword.newPassword" #newPassword="ngModel" required />
+                            <div *ngIf="fpass.submitted && !newPassword.valid">
+                              Mot de passe est obligatoire
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="password" class="col-sm-2 control-label">Confirmer</label>
+
+                          <div class="col-sm-10">
+                            <input type="password" class="form-control" id="password" placeholder="Confirmer mot de passe" name="password" [(ngModel)]="password" required />
+                            <div *ngIf="fpass.submitted && !password">
+                              Confirmation du mot de passe est obligatoire
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit"  class="btn btn-danger">Modifier</button>
+                            <!--<button type="submit" class="btn btn-danger">Submit</button>-->
+                          </div>
+                        </div>
+                      </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+    </section>
+    <!--modal-->
+
+</div>
