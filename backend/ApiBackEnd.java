@@ -17,7 +17,9 @@ public class ApiBackEnd {
 	
 	@ApiMethod(name="addUser",httpMethod="POST",path="users")
 	public User addUser(User us1){
-		User userAdded = getPersistenceManager().makePersistent(us1);
+		PersistenceManager pm = getPersistenceManager();
+		User userAdded = pm.makePersistent(us1);
+		//User temp = addFollow(userAdded.getKey().getId(),userAdded.getKey().getId());
 		return userAdded;
 	}
 	

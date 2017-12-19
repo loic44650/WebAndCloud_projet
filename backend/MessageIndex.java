@@ -2,7 +2,9 @@ package webcloud;
 
 //import java.util.List;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.annotations.*;
 
@@ -19,12 +21,17 @@ public class MessageIndex{
 	Message msg;
 	
 	@Persistent
-	List<Long> receivers;
+	long timestamp;
+	
+	@Persistent
+	Set<Long> receivers = new HashSet<Long>();
+	
 	
 	
 
-	public MessageIndex(Message msg, List<Long> list) {
+	public MessageIndex(Message msg, Set<Long> list) {
 		this.msg = msg;
+		this.timestamp = System.currentTimeMillis();// Pour clement 
 		this.receivers = list;
 	}
 
@@ -45,14 +52,14 @@ public class MessageIndex{
 	/**
 	 * @return the receivers
 	 */
-	public List<Long> getReceivers() {
+	public Set<Long> getReceivers() {
 		return receivers;
 	}
 
 	/**
 	 * @param receivers the receivers to set
 	 */
-	public void setReceivers(List<Long> receivers) {
+	public void setReceivers(Set<Long> receivers) {
 		this.receivers = receivers;
 	}
 

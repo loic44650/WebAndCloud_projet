@@ -1,7 +1,9 @@
 package webcloud;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Named;
 import javax.jdo.PersistenceManager;
@@ -9,6 +11,7 @@ import javax.jdo.Query;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.config.ApiNamespace;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -20,17 +23,18 @@ public class ApiMsgs {
 	
 	@ApiMethod(name="addMessage",httpMethod="post",path="messages")
 	public MessageIndex addMessage(Message msg){
+		PersistenceManager pm = getPersistenceManager();
 		try {
-			//Message msgAdded = getPersistenceManager().makePersistent(msg);
-			User usr1 = (User) getPersistenceManager().getObjectById(User.class,
-					KeyFactory.createKey(User.class.getSimpleName(), msg.getUserId())); 
-			
-			MessageIndex msgIndex = new MessageIndex(msg,usr1.getLesfollows());
-			getPersistenceManager().makePersistent(msgIndex);
+			User usr1 = (User) pm.getObjectById(User.class,
+					KeyFactory.createKey(User.class.getSimpleName(), msg.getUserId()));
+			Set<Long> users = usr1.getLesfollows();
+			users.add(msg.getUserId());
+			MessageIndex msgIndex = new MessageIndex(msg,users);
+			pm.makePersistent(msgIndex);
 			return msgIndex;
 		}
 		finally{
-			getPersistenceManager().close();
+			pm.close();
 		}
 	}
 	
@@ -46,25 +50,49 @@ public class ApiMsgs {
 	@ApiMethod(name="listMessagesIndex",httpMethod="get",path="messagesIndex")
 	public List<MessageIndex> listMessagesIndex(){
 		PersistenceManager pm = getPersistenceManager();
-	    Query query = pm.newQuery(MessageIndex.class);
-	    return (List<MessageIndex>) pm.newQuery(query).execute();
+		Query query = pm.newQuery(MessageIndex.class);
+		// on recupere tous les MessageIndex
+		query.setOrdering("timestamp desc");
+		return (List<MessageIndex>) pm.newQuery(query).execute();
 	}
 	
 	
 	@SuppressWarnings("unchecked")
-	@ApiMethod(name="getmytwitts",httpMethod="get",path="messagesIndex/userID")
-	public List<Message> getmytwitts(@Named("userID") Long id){
+	@ApiMethod(name="getMesTwitts",httpMethod="get",path="messagesTwitts/userID")
+	public Set<Message> getMesTwitts(@Named("userID") Long id,@Named("nbTwitt") Long nbLimit){
 		PersistenceManager pm = getPersistenceManager();
-		List<MessageIndex> msgIndex;
-		List<Message> msgs = new ArrayList<>();
+		Set<MessageIndex> msgIndex;
+		Set<Message> msgs = new HashSet<>();
 		Query query = pm.newQuery(MessageIndex.class);
 		// on recupere tous les MessageIndex
-		msgIndex = (List<MessageIndex>) pm.newQuery(query).execute();
+		query.setFilter("receivers =="+id);
+		query.setOrdering("timestamp desc");
+		query.setRange(0,nbLimit);
+		msgIndex = (Set<MessageIndex>) query.execute();
+		
 		for ( MessageIndex index : msgIndex){
-			if (index.contains(id)) 
 				msgs.add(index.getMessage());
 		}
 		return msgs;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ApiMethod(name="getMyTimeline",httpMethod="get",path="messagesTimeline/userID")
+	public Set<Message> getMyTimeline(@Named("userID") Long idUser,@Named("nbDeMessages") Long nbMsg)
+	{
+		PersistenceManager pm = getPersistenceManager();
+		Set<MessageIndex> msgIndex;
+		Set<Message> msgs = new HashSet<>();
+		Query query = pm.newQuery(MessageIndex.class);
+		// on recupere tous les MessageIndex
+		query.setFilter("receivers =="+idUser);
+		query.setOrdering("timestamp desc");
+		query.setRange(0,nbMsg);
+		msgIndex = (Set<MessageIndex>) query.execute();
+		for ( MessageIndex index : msgIndex){
+				msgs.add(index.getMessage());
+		}
+		return msgs;		
 	}
 	
 	private static PersistenceManager getPersistenceManager() {

@@ -1,4 +1,4 @@
-package tinyTwitt;
+package webcloud;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;

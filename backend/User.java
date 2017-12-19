@@ -1,7 +1,11 @@
 package webcloud;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.jdo.annotations.*;
+
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
@@ -16,22 +20,22 @@ public class User {
 	
 	@Persistent
 	@Element(dependent="true")
-	List<Long> lesfollows;// les gens qui me follow
+	Set<Long> lesfollows = new HashSet<Long>();// les gens qui me follow
 	
 	@Persistent
-	List<Long> mesfollow;
+	Set<Long> mesfollow = new HashSet<Long>();
 	
 	/**
 	 * @return the mesfollow
 	 */
-	public List<Long> getMesfollow() {
+	public Set<Long> getMesfollow() {
 		return mesfollow;
 	}
 
 	/**
 	 * @param mesfollow the mesfollow to set
 	 */
-	public void setMesfollow(List<Long> mesfollow) {
+	public void setMesfollow(Set<Long> mesfollow) {
 		this.mesfollow = mesfollow;
 	}
 
@@ -74,14 +78,14 @@ public class User {
 	/**
 	 * @return the lesfollows
 	 */
-	public List<Long> getLesfollows() {
+	public Set<Long> getLesfollows() {
 		return lesfollows;
 	}
 
 	/**
 	 * @param lesfollows the lesfollows to set
 	 */
-	public void setLesfollows(List<Long> lesfollows) {
+	public void setLesfollows(Set<Long> lesfollows) {
 		this.lesfollows = lesfollows;
 	}
 	
