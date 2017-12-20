@@ -54,8 +54,8 @@ public class ApiMsgs {
 	
 	
 	@SuppressWarnings("unchecked")
-	@ApiMethod(name="getMesTwitts",httpMethod="get",path="messagesTwitts/{userID}")
-	public List<Message> getMesTwitts(@Named("userID") Long id,@Named("nbTwitt") Long nbLimit){
+	@ApiMethod(name="getMesMessages",httpMethod="get",path="users/{userID}/messages")
+	public List<Message> getMesMessages(@Named("userID") Long id,@Named("nbTwitt") Long nbLimit){
 		PersistenceManager pm = getPersistenceManager();
 		List<MessageIndex> msgIndex;
 		List<Message> msgs = new ArrayList<>();
