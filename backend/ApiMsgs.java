@@ -61,7 +61,7 @@ public class ApiMsgs {
 		List<Message> msgs = new ArrayList<>();
 		Query query = pm.newQuery(MessageIndex.class);
 		// on recupere tous les MessageIndex
-		query.setFilter("usersId =="+id	);
+		query.setFilter("userId	 =="+id	);
 		query.setOrdering("timestamp desc");
 		query.setRange(0,nbLimit);
 		msgIndex = (List<MessageIndex>) query.execute();
