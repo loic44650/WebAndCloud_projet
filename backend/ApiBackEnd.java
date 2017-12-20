@@ -27,12 +27,21 @@ public class ApiBackEnd {
 	public User addFollow(@Named("idUser") Long userId,@Named("aSuivre") Long user){
 		User usr,usrAsuivre;
 		try {
-			usr = (User) getPersistenceManager().getObjectById(User.class,
+			PersistenceManager pm = getPersistenceManager();
+			usr = (User) pm.getObjectById(User.class,
 					KeyFactory.createKey(User.class.getSimpleName(), userId));
-			usrAsuivre = (User) getPersistenceManager().getObjectById(User.class,
+			usrAsuivre = (User) pm.getObjectById(User.class,
 					KeyFactory.createKey(User.class.getSimpleName(), user)); 
 			usr.ajoutLesGensQueJeSuit(user);
 			usrAsuivre.ajoutLesGensQuiMeFollow(userId);
+			
+			Query query = pm.newQuery(MessageIndex.class);
+			query.setFilter("userId ==" + user);
+			@SuppressWarnings("unchecked")
+			List<MessageIndex> listMI = (List<MessageIndex>) query.execute();
+			for (MessageIndex mi : listMI){
+				mi.getReceivers().add(userId);
+			}
 		}
 		finally
 		{
@@ -46,9 +55,76 @@ public class ApiBackEnd {
 	public List<User> listUsers(){
 		PersistenceManager pm = getPersistenceManager();
 	    Query query = pm.newQuery(User.class);
-	    return (List<User>) pm.newQuery(query).execute();
+	    return (List<User>) query.execute();
 	}
 	
+	/*
+	 * il rajout a userID nb de limit folower
+	 */
+	@ApiMethod(name="genereFollower",httpMethod="post",path="users/addFollowerTo/{idUser}")
+	public User genereFollower(@Named("idUser") Long userID,@Named("limit") Long limit)
+	{
+		PersistenceManager pm = getPersistenceManager();
+		Query query = pm.newQuery(User.class);
+		query.setRange(0,limit+1);
+		query.setOrdering("name asc");
+		User userToFollow = pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+	    @SuppressWarnings("unchecked")
+		List<User> listUsers = (List<User>) query.execute();
+	    for (User temp : listUsers){
+	    	temp.ajoutLesGensQueJeSuit(userID);
+	    	userToFollow.ajoutLesGensQuiMeFollow(temp.getKey().getId());	    	
+	    }
+		return (User) pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+		
+	}
+	
+	/*
+	 * il rajout a userID nb entre limit min et max follower
+	 */
+	@ApiMethod(name="ajoutPersonneFollower",httpMethod="post",path="users/{idUser}/usersTofollowRange")
+	public User ajoutPersonneFollower(@Named("idUser") Long userID,@Named("limitMin") Long limitMin,@Named("limitMax") Long limitMax)
+	{
+		PersistenceManager pm = getPersistenceManager();
+		Query query = pm.newQuery(User.class);
+		query.setRange(limitMin,limitMax);
+		query.setOrdering("name asc");
+		User userToFollow = pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+	    @SuppressWarnings("unchecked")
+		List<User> listUsers = (List<User>) query.execute();
+	    for (User temp : listUsers){
+	    	userToFollow.ajoutLesGensQuiMeFollow(temp.getKey().getId());
+	    	temp.ajoutLesGensQueJeSuit(userID);	    	
+	    }
+		return (User) pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+		
+	}
+	
+	/*@ApiMethod(name="ajoutMoiAbonne",httpMethod="post",path="users/{idUser}/usersTofollow")
+	public User addNFollow(@Named("idUser") Long userID,@Named("limit") Long limit)
+	{
+		PersistenceManager pm = getPersistenceManager();
+		Query query = pm.newQuery(User.class);
+		query.setRange(0,limit+1);
+		query.setOrdering("name asc");
+		User userToFollow = pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+	    @SuppressWarnings("unchecked")
+		List<User> listUsers = (List<User>) query.execute();
+	    for (User temp : listUsers){
+	    	userToFollow.ajoutLesGensQuiMeFollow(temp.getKey().getId());
+	    	temp.ajoutLesGensQueJeSuit(userID);	     	
+	    }
+		return (User) pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+		
+	}
+	*/
+	
+	
+	@ApiMethod(name="getUser",httpMethod="get",path="users/{iduser}")
+	public User getUser(@Named("iduser") Long id){
+		PersistenceManager pm = getPersistenceManager();
+		return (User) pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), id));
+	}
 	
 	private static PersistenceManager getPersistenceManager() {
 		return PMF.get().getPersistenceManager();

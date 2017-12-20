@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {adressBackEnd} from '../../app.component';
+import {Message} from "../../models/Message/message.model";
 
 @Injectable()
 export class TwittsService{
@@ -11,18 +12,19 @@ export class TwittsService{
   constructor(
     private http: Http
   ){
-    this.localurl = adressBackEnd + 'messages/';
+    this.localurl = adressBackEnd + 'messages';
   }
 
-  addTwitts(twitt: any)
+  addTwitts(twitt: Message)
   {
-    return this.http.post(this.localurl, JSON.parse(twitt));
+    return this.http.post('https://1-dot-webcloud-122127.appspot.com/_ah/api/messages/v1/messages',twitt);
   }
 
-  getTwittsForMe(userId: any )
+  getTwittsForMe(userId: any,nb:any)
   {
-    let localurl = this.localurl + 'v1/messagesIndex/userID?userID=';
-    localurl += userId;
-    return this.http.get(localurl);
+    return this.http.get('https://1-dot-webcloud-122127.appspot.com/_ah/api/messages/v1/messagesTimeline/'
+      +userId.toString()+'?nbDeMessages='+nb.toString());
   }
+
+
 }

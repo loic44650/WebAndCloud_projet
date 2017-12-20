@@ -34,5 +34,7 @@ export class UserService{
     return this.http.post('https://1-dot-webcloud-122127.appspot.com/_ah/api/users/v1/users/'+myUserId.toString()
       +'/addFollower?aSuivre='+otherUserId.toString(),us);
   }
+
+  //genereFollower
 }
 

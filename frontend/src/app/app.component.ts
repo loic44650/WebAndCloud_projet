@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {NgSpinningPreloader} from 'ng2-spinning-preloader';
 
-export const adressBackEnd = 'https://2-dot-webcloud-122127.appspot.com/_ah/api/';
+export const adressBackEnd = 'https://1-dot-webcloud-122127.appspot.com/_ah/api/';
 
 
 @Component({

@@ -34,6 +34,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgSpinningPreloader} from 'ng2-spinning-preloader';
 import {UserService} from "./services/User/user.services";
+import {CalculFollowersComponent} from "./CalculFollowers/calculFollowers.compotent";
+import {TwittsService} from "./services/Twitts/twitts.service";
 
 
 @NgModule({
@@ -60,6 +62,7 @@ import {UserService} from "./services/User/user.services";
         FooterComponent,
         ProfileComponent,
         DashboardComponent,
+        CalculFollowersComponent,
         error403
     ],
     bootstrap:    [ AppComponent ],
@@ -67,7 +70,8 @@ import {UserService} from "./services/User/user.services";
         AuthenticationGuard,
         AuthenticationService,
         NgSpinningPreloader,
-        UserService
+        UserService,
+        TwittsService
     ],
 })
 export class AppModule { }

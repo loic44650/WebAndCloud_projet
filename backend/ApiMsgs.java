@@ -1,5 +1,6 @@
 package webcloud;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +18,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class ApiMsgs {
 	
 	@ApiMethod(name="addMessage",httpMethod="post",path="messages")
-	public MessageIndex addMessage(Message msg){
+	public Message addMessage(Message msg){
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			User usr1 = (User) pm.getObjectById(User.class,
@@ -26,7 +27,7 @@ public class ApiMsgs {
 			users.add(msg.getUserId());
 			MessageIndex msgIndex = new MessageIndex(msg,users);
 			pm.makePersistent(msgIndex);
-			return msgIndex;
+			return msgIndex.getMessage();
 		}
 		finally{
 			pm.close();
@@ -53,18 +54,17 @@ public class ApiMsgs {
 	
 	
 	@SuppressWarnings("unchecked")
-	@ApiMethod(name="getMesTwitts",httpMethod="get",path="messagesTwitts/userID")
-	public Set<Message> getMesTwitts(@Named("userID") Long id,@Named("nbTwitt") Long nbLimit){
+	@ApiMethod(name="getMesTwitts",httpMethod="get",path="messagesTwitts/{userID}")
+	public List<Message> getMesTwitts(@Named("userID") Long id,@Named("nbTwitt") Long nbLimit){
 		PersistenceManager pm = getPersistenceManager();
-		Set<MessageIndex> msgIndex;
-		Set<Message> msgs = new HashSet<>();
+		List<MessageIndex> msgIndex;
+		List<Message> msgs = new ArrayList<>();
 		Query query = pm.newQuery(MessageIndex.class);
 		// on recupere tous les MessageIndex
-		query.setFilter("receivers =="+id);
+		query.setFilter("usersId =="+id	);
 		query.setOrdering("timestamp desc");
 		query.setRange(0,nbLimit);
-		msgIndex = (Set<MessageIndex>) query.execute();
-		
+		msgIndex = (List<MessageIndex>) query.execute();
 		for ( MessageIndex index : msgIndex){
 				msgs.add(index.getMessage());
 		}
@@ -72,18 +72,18 @@ public class ApiMsgs {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@ApiMethod(name="getMyTimeline",httpMethod="get",path="messagesTimeline/userID")
-	public Set<Message> getMyTimeline(@Named("userID") Long idUser,@Named("nbDeMessages") Long nbMsg)
+	@ApiMethod(name="getMyTimeline",httpMethod="get",path="messagesTimeline/{userID}")
+	public List<Message> getMyTimeline(@Named("userID") Long idUser,@Named("nbDeMessages") Long nbMsg)
 	{
 		PersistenceManager pm = getPersistenceManager();
-		Set<MessageIndex> msgIndex;
-		Set<Message> msgs = new HashSet<>();
+		List<MessageIndex> msgIndex;
+		List<Message> msgs = new ArrayList<>();
 		Query query = pm.newQuery(MessageIndex.class);
 		// on recupere tous les MessageIndex
 		query.setFilter("receivers =="+idUser);
 		query.setOrdering("timestamp desc");
 		query.setRange(0,nbMsg);
-		msgIndex = (Set<MessageIndex>) query.execute();
+		msgIndex = (List<MessageIndex>) query.execute();
 		for ( MessageIndex index : msgIndex){
 				msgs.add(index.getMessage());
 		}

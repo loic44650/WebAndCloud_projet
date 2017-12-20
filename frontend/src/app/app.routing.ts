@@ -7,6 +7,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import {error403} from "./components/error/403/error403.component";
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
+import {CalculFollowersComponent} from "./CalculFollowers/calculFollowers.compotent";
 
 const appRoutes : Routes = [
     {path: '', component: LoginComponent },
@@ -15,8 +16,9 @@ const appRoutes : Routes = [
     {path : "home",component : DashboardComponent},
     {path : '403',component: error403,canActivate : [AuthenticationGuard]},
     {path : 'profile',component:ProfileComponent,canActivate : [AuthenticationGuard]},
+    {path: 'calculfollowers',component:CalculFollowersComponent},
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];
 
-export const routing = RouterModule.forRoot(appRoutes);
+export const routing = RouterModule.forRoot(appRoutes);   

@@ -20,6 +20,9 @@ public class MessageIndex{
 	Message msg;
 	
 	@Persistent
+	Long userId;
+	
+	@Persistent
 	long timestamp;
 	
 	@Persistent
@@ -32,6 +35,7 @@ public class MessageIndex{
 		this.msg = msg;
 		this.timestamp = System.currentTimeMillis();// Pour clement 
 		this.receivers = list;
+		this.userId = msg.getUserId();
 	}
 
 	/**

@@ -8,6 +8,17 @@
 
     <!-- Main content -->
   <section class="content">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-6">
+        <input [(ngModel)]="model.min" type="number" name="min" #min="ngModel" placeholder="Min">
+        <input [(ngModel)]="model.max" type="number" name="max" #max="ngModel" placeholder="Max">
+
+
+        <button class=" btn btn-danger" (click)="createUser()">Initialiser les users</button>
+        <button class="btn btn-danger" (click)="addFollow()">addFollow</button>
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-md-2"></div>
@@ -19,7 +30,11 @@
               <img class="img-responsive img-circle img-sm" src="./assets/dist/img/user.png" alt="Alt Text">
               <!-- .img-push is used to add margin to elements next to floating images -->
               <div class="img-push">
-                <input type="text" class="form-control input-sm" placeholder="Press enter to post comment">
+                <input type="text" #msg="ngModel" class="form-control input-sm" maxlength="180" name="msg" [(ngModel)]="message.msg" placeholder="Press enter to post comment">
+                <button class="btn btn-twitter" [disabled]="!desactiver" (click)="writeTwett()" ><span class="fa fa-twitter"></span></button>
+              </div>
+              <div class="box-body">
+                <span>{{message.message}}</span>
               </div>
             </form>
           </div>
@@ -34,6 +49,39 @@
       <!-- /.col -->
     </div>
     <!-- /.row -->
+
+    <div *ngFor="let msg of lesMessages" class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-6">
+        <!-- Box Comment -->
+        <div class="box box-widget">
+
+          <div class="box-header with-border">
+            <div class="user-block">
+              <img class="img-circle" src="./assets/dist/img/avatar5.png" alt="User Image">
+              <span class="username"><a href="#">{{msg.userId}}</a></span>
+              <span class="description">Shared publicly - 7:30 PM Today</span>
+            </div>
+            <!-- /.user-block -->
+
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <!--<img class="img-responsive pad" src="./assets/dist/img/photo4.jpg" alt="Photo">-->
+
+            <p>{{msg.message}}</p>
+          </div>
+        </div>
+        <!-- /.box -->
+      </div>
+      <!-- /.col -->
+      <div class="col-md-6">
+        <!-- Box Comment -->
+
+        <!-- /.box -->
+      </div>
+      <!-- /.col -->
+    </div>
 
     <div class="row">
         <div class="col-md-2"></div>
@@ -87,14 +135,6 @@
           </div>
          </div>
         <!-- /.box -->
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-6">
-        <button class=" btn btn-danger" (click)="createUser()">Initialiser les users</button>
-        <button class="btn btn-danger" (click)="addFollow()">addFollow</button>
       </div>
     </div>
   </section>
