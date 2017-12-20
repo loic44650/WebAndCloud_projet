@@ -1,6 +1,3 @@
-/**
- * Created by danielahmed on 16/04/2017.
- */
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -21,4 +18,4 @@ const appRoutes : Routes = [
     { path: '**', redirectTo: '' }
 ];
 
-export const routing = RouterModule.forRoot(appRoutes);   
+export const routing = RouterModule.forRoot(appRoutes);

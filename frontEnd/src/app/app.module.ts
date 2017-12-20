@@ -1,5 +1,4 @@
 import { NgModule }      from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -17,42 +16,20 @@ import {error403} from "./components/error/403/error403.component";
 
 import { routing } from './app.routing';
 
-
-import {NgIdleKeepaliveModule } from '@ng-idle/keepalive';
-
-import { Ng2CompleterModule } from "ng2-completer";
-
-import {DataTableModule} from 'primeng/components/datatable/datatable';
-import {DialogModule,CalendarModule} from 'primeng/primeng';
-import {ChartsModule} from "ng2-charts";
-
-
-import {MdDialogModule,MdButtonModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-
-
-import {NgSpinningPreloader} from 'ng2-spinning-preloader';
 import {UserService} from "./services/User/user.services";
 import {CalculFollowersComponent} from "./CalculFollowers/calculFollowers.compotent";
 import {TwittsService} from "./services/Twitts/twitts.service";
+import {HttpModule} from "@angular/http";
 
 
 @NgModule({
     imports:      [
         BrowserModule,
-        HttpModule,
         FormsModule,
         routing,
-        MdDialogModule,
-        MdButtonModule,
-        DialogModule,
+        HttpModule,
         BrowserAnimationsModule,
-        NgIdleKeepaliveModule.forRoot(),
-        Ng2CompleterModule,
-        DataTableModule,
-        ChartsModule,
-        CalendarModule
     ],
     declarations: [
         AppComponent,
@@ -69,7 +46,6 @@ import {TwittsService} from "./services/Twitts/twitts.service";
     providers : [
         AuthenticationGuard,
         AuthenticationService,
-        NgSpinningPreloader,
         UserService,
         TwittsService
     ],
