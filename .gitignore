@@ -1,3 +1,5 @@
 frontEnd/node_modules/**
 frontEnd/dist/**
 .idea/
+.metadata/**
+./RemoteSystemsTempFiles/**
