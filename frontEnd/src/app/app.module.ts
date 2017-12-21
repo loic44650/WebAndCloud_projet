@@ -21,7 +21,16 @@ import {UserService} from "./services/User/user.services";
 import {CalculFollowersComponent} from "./CalculFollowers/calculFollowers.compotent";
 import {TwittsService} from "./services/Twitts/twitts.service";
 import {HttpModule} from "@angular/http";
+import {GoogleApiModule, NG_GAPI_CONFIG, NgGapiClientConfig} from "ng-gapi";
 
+let gapiClientConfig: NgGapiClientConfig = {
+  client_id: "webcloud-122127",
+  discoveryDocs: ["https://analyticsreporting.googleapis.com/$discovery/rest?version=v4"],
+  scope: [
+    "https://www.googleapis.com/auth/analytics.readonly",
+    "https://www.googleapis.com/auth/analytics"
+  ].join(" ")
+};
 
 @NgModule({
     imports:      [
@@ -30,6 +39,10 @@ import {HttpModule} from "@angular/http";
         routing,
         HttpModule,
         BrowserAnimationsModule,
+        GoogleApiModule.forRoot({
+          provide: NG_GAPI_CONFIG,
+          useValue: gapiClientConfig
+        }),
     ],
     declarations: [
         AppComponent,

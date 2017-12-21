@@ -1,6 +1,3 @@
-/**
- * Created by danielahmed on 15/04/2017.
- */
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs';
@@ -9,6 +6,7 @@ import { HeaderComponent } from '../../components/header/header.component';
 import 'rxjs/add/operator/map';
 import {adressBackEnd} from "../../app.component";
 import {Router} from "@angular/router";
+import {GoogleAuthService} from "ng-gapi";
 
 
 @Injectable()
@@ -19,36 +17,13 @@ export class AuthenticationService {
         private router :Router,
         private http : Http,
         private userServ:UserService,
-
+        private googleAuth: GoogleAuthService
     ){
       this.model = {email : 'admin@tinytwitt.fr', pass : 'toto'};
 
     }
 
-  /*  login(username : string, password : string): Observable <boolean> {
-        let headers = new Headers({ "Access-Control-Allow-Origin": "*" });
-        let options = new RequestOptions({ headers: headers });
-        return this.http.post(adressBackEnd+"/auth-tokens", { login:username, password:password },options).map(
-            (response : Response) => {
-                let token = response.json() && response.json().token;
-                let id = response.json() && response.json().id;
-                let refreshToken = response.json() && response.json().refreshToken;
-                let expiresIn = response.json() && response.json().expiresIn;
-                let createdAt = response.json() && response.json().createdAt;
-                if(token){
-                    this.token = token;
-                    localStorage.setItem('currentUser', JSON.stringify({ username: username,token: token,refreshToken : refreshToken, id : id,expiresIn : expiresIn,createdAt:createdAt}));
-                    this.userServ.getCurrentUser().subscribe(
-                        complete => localStorage.setItem('user',JSON.stringify(complete.json()))
-                    );
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        );
-    }
-*/
+
     loginLocal(username : string, password : string): Boolean
     {
       console.log(this.model);
@@ -69,7 +44,19 @@ export class AuthenticationService {
       }
     }
 
-    refresh(){
+
+    loginWithGoogle(){
+        this.googleAuth.getAuth().subscribe(
+          auth => {
+            auth.signIn().then(
+              complete =>{
+                console.log(complete.json())
+              },
+              err =>console.log(err)
+            ),
+              err => console.log(err)
+          }
+        )
 
     }
 
