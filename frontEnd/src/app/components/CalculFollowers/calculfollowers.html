@@ -1,0 +1,38 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      {{title}}
+    </h1>
+  </section>
+
+  <section class="content" style="background-color: white">
+    <div class="col-md-4">
+        Nombre de mesures :<br/>
+        <input #val type="number" class="form-control">
+        <button (click)="faitMoiDeMesure100(val.value)" style="margin-left:15px" class="btn btn-danger">Poster un tweet pour un utilisateur avec 100 follower</button>
+        <br/>
+        <div *ngFor="let mes of tabMesure100">
+          <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        Nombre de mesures :<br/>
+        <input #val2 type="number" class="form-control">
+        <button (click)="faitMoiDeMesure1000(val2.value)" style="margin-left:15px" class="btn btn-danger">Poster un tweet pour un utilisateur avec 1000 follower</button>
+        <br/>
+        <div *ngFor="let mes of tabMesure1000">
+          <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        Nombre de mesures :<br/>
+        <input #val3 type="number" class="form-control">
+        <button (click)="faitMoiDeMesure2500(val3.value)" style="margin-left:15px" class="btn btn-danger">Poster un tweet pour un utilisateur avec 2500 follower</button>
+        <br/>
+        <div *ngFor="let mes of tabMesure2500">
+          <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
+        </div>
+    </div>
+  </section>
+</div>

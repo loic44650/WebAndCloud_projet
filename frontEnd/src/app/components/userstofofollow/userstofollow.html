@@ -1,0 +1,32 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      {{title}}
+    </h1>
+  </section>
+
+  <section class="content">
+    <div class="row">
+      <div *ngIf="temps"class="box box-widget">
+        <span class="box-header with-border">Suivre qqn ca prend {{temps}} ms</span>
+      </div>
+      <div *ngFor="let user of lesUsers" class="col-md-4">
+        <div class="box box-widget">
+
+          <div class="box-header with-border">
+
+            <img style="width: 50px" class="img-circle" src="./assets/dist/img/avatar5.png" alt="User Image">
+            <span class="username"><a href="#">{{user.name}}</a></span>
+            <input  hidden #idfollow type="number" value="{{user.id}}" readonly>
+            <button style="margin-left:70px" class="btn-twitter right" (click)="addfollow(idfollow.value)" >Suivre</button>
+
+            <!-- /.user-block -->
+          </div>
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+    <button class="btn btn-bitbucket" (click)="getMorePeople()">Get More People</button>
+  </section>
+</div>

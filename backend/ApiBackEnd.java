@@ -100,25 +100,53 @@ public class ApiBackEnd {
 		
 	}
 	
-	/*@ApiMethod(name="ajoutMoiAbonne",httpMethod="post",path="users/{idUser}/usersTofollow")
+	/**
+	 * Ajoute aux userId des abonnes/abonnements
+	 * @param userID
+	 * @param limit
+	 * @return
+	 */
+	@ApiMethod(name="ajoutMoiAbonne",httpMethod="post",path="users/{idUser}/usersTofollow")
 	public User addNFollow(@Named("idUser") Long userID,@Named("limit") Long limit)
 	{
 		PersistenceManager pm = getPersistenceManager();
 		Query query = pm.newQuery(User.class);
 		query.setRange(0,limit+1);
 		query.setOrdering("name asc");
-		User userToFollow = pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+		User moi = pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
 	    @SuppressWarnings("unchecked")
 		List<User> listUsers = (List<User>) query.execute();
 	    for (User temp : listUsers){
-	    	userToFollow.ajoutLesGensQuiMeFollow(temp.getKey().getId());
-	    	temp.ajoutLesGensQueJeSuit(userID);	     	
+	    	moi.ajoutLesGensQueJeSuit(temp.getKey().getId());
+	    	temp.ajoutLesGensQuiMeFollow(userID);
 	    }
-		return (User) pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+		return moi;
 		
-	}
-	*/
+	}	
 	
+	/**
+	 * Ajoute aux userId des abonnes/abonnements entre min et max
+	 * @param userID
+	 * @param limit
+	 * @return
+	 */
+	@ApiMethod(name="ajoutMoiAbonneRange",httpMethod="post",path="users/{idUser}/usersTofollow/min/{Min}/max/{Max}")
+	public User addNFollowRange(@Named("idUser") Long userID,@Named("Min") Long min,@Named("Max") Long max)
+	{
+		PersistenceManager pm = getPersistenceManager();
+		Query query = pm.newQuery(User.class);
+		query.setRange(min,max+1);
+		query.setOrdering("name asc");
+		User moi = pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), userID));
+	    @SuppressWarnings("unchecked")
+		List<User> listUsers = (List<User>) query.execute();
+	    for (User temp : listUsers){
+	    	moi.ajoutLesGensQueJeSuit(temp.getKey().getId());
+	    	temp.ajoutLesGensQuiMeFollow(userID);
+	    }
+		return moi;
+		
+	}	
 	
 	@ApiMethod(name="getUser",httpMethod="get",path="users/{iduser}")
 	public User getUser(@Named("iduser") Long id){
@@ -126,6 +154,17 @@ public class ApiBackEnd {
 		return (User) pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(), id));
 	}
 	
+	@SuppressWarnings("unchecked")
+	@ApiMethod(name="getUserSuggestions",httpMethod="get",path="users/{userId}/getSuggestions/min/{Min}/max/{Max}")
+	public List<User> getUserSuggestions(@Named("userId") Long userId,@Named("Min") Long min,@Named("Max") Long max){
+		PersistenceManager pm = getPersistenceManager();
+		//User temp = (User) pm.getObjectById(User.class,KeyFactory.createKey(User.class.getSimpleName(),userId));
+		Query query = pm.newQuery(User.class);
+		query.setRange(min,max);
+		query.setFilter("lesGensQuiMeSuit != "+userId);
+		return (List<User>) query.execute();		
+	} 
+ 	
 	private static PersistenceManager getPersistenceManager() {
 		return PMF.get().getPersistenceManager();
 	}

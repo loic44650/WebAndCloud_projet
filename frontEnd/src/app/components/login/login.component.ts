@@ -1,11 +1,7 @@
-/**
- * Created by danielahmed on 16/04/2017.
- */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../../services/Authentication/authentication.services';
-import {UserService} from '../../services/User/user.services';
 
 @Component({
     moduleId : module.id,

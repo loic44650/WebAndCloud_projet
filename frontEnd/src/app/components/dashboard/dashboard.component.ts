@@ -8,7 +8,8 @@ import {onerror} from "q";
 import {Message} from "../../models/Message/message.model";
 import {TwittsService} from "../../services/Twitts/twitts.service";
 import {jsonpFactory} from "@angular/http/src/http_module";
-
+import {Router} from "@angular/router";
+import {DatePipe} from "@angular/common";
 
 @Component({
     moduleId:module.id,
@@ -25,36 +26,39 @@ export class DashboardComponent implements OnInit{
     tweet :Message;
     id = 4843829756690432;
     desactiver = true;
+    getTimeline = null;
+    nbMessage = 15;
     constructor(
       private userS : UserService,
-      private twitS : TwittsService
+      private twitS : TwittsService,
+      private route : Router,
+      private dateP :DatePipe,
     ){
       this.nb = 5;
       this.model = {};
       this.message = {};
-      this.tweet = new Message();
+      this.tweet = null;
       //this.lesMessages = Message[]
     }
 
     ngOnInit(): void {
-      //this.userS.getListUsers()
-      this.getTweets();
-
+        this.getTweets();
+        let datefin = new Date();
     }
 
     writeTwett(){
         this.desactiver = false;
         if (this.message.msg) {
-          this.tweet.userId = 4843829756690432;
-          this.tweet.message = this.message.msg;
+          this.tweet = new Message(this.message.msg,4843829756690432);
           this.message.msg = null;
           console.log(this.tweet);
+          let dateDeb = new Date().getTime();
           this.twitS.addTwitts(this.tweet).subscribe(
             complete => {
+              let datefin = new Date().getTime();
               console.log(complete.json());
-              let message = new Message();
-              message.userId = complete.json().userId;
-              message.message = complete.json().message;
+              let message = new Message(complete.json().message,complete.json().userId);
+              message.time = (datefin-dateDeb);
               this.lesMessages.unshift(message);
             },
             err => console.log(err)
@@ -65,15 +69,17 @@ export class DashboardComponent implements OnInit{
     }
 
   getTweets() {
-    this.twitS.getTwittsForMe(this.id, 15).subscribe(
+    let datedeb = new Date().getTime();
+    console.log("1 :"+datedeb);
+    this.twitS.getTwittsForMe(this.id, this.nbMessage).subscribe(
       complete => {
-        console.log(complete.json())
-        let message = new Message();
+        let datefin =new Date().getTime();
+        this.getTimeline = datefin-datedeb;
+        console.log("2 :"+datefin);
+        console.log("3 :"+(datefin-datedeb));
+        console.log(complete.json());
         for (let i = 0; i < complete.json().items.length; i++) {
-          message.userId = complete.json().items[i].userId;
-          message.message = complete.json().items[i].message;
-          this.lesMessages.push(message);
-          message = new Message();
+          this.lesMessages.push(new Message(complete.json().items[i].message,complete.json().items[i].userId));
         }
       },
       err => console.log(err)

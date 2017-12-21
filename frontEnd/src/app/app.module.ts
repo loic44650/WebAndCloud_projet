@@ -18,10 +18,13 @@ import { routing } from './app.routing';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {UserService} from "./services/User/user.services";
-import {CalculFollowersComponent} from "./CalculFollowers/calculFollowers.compotent";
+import {CalculFollowersComponent} from "./components/CalculFollowers/calculFollowers.compotent";
 import {TwittsService} from "./services/Twitts/twitts.service";
 import {HttpModule} from "@angular/http";
 import {GoogleApiModule, NG_GAPI_CONFIG, NgGapiClientConfig} from "ng-gapi";
+import {usersToFollowComponent} from "./components/userstofofollow/userstofollow.component";
+import {DatePipe} from "@angular/common";
+import {testComponent} from "./components/testMessage/testMessage.component";
 
 let gapiClientConfig: NgGapiClientConfig = {
   client_id: "webcloud-122127",
@@ -53,14 +56,17 @@ let gapiClientConfig: NgGapiClientConfig = {
         ProfileComponent,
         DashboardComponent,
         CalculFollowersComponent,
-        error403
+        usersToFollowComponent,
+        error403,
+        testComponent,
     ],
     bootstrap:    [ AppComponent ],
     providers : [
         AuthenticationGuard,
         AuthenticationService,
         UserService,
-        TwittsService
+        TwittsService,
+        DatePipe,
     ],
 })
 export class AppModule { }

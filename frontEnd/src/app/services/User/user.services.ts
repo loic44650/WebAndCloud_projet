@@ -36,5 +36,10 @@ export class UserService{
   }
 
   //genereFollower
+
+  getSuggestions(id:any,min:any,max:any){
+    return this.http.get('https://1-dot-webcloud-122127.appspot.com/_ah/api/users/v1/users/'
+      +id+'/getSuggestions/min/'+min+'/max/'+max);
+  }
 }
 

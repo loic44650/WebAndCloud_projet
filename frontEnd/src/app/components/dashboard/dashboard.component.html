@@ -34,7 +34,7 @@
                 <button class="btn btn-twitter" [disabled]="!desactiver" (click)="writeTwett()" ><span class="fa fa-twitter"></span></button>
               </div>
               <div class="box-body">
-                <span>{{message.message}}</span>
+                <span>Timeline recup en {{getTimeline}} ms pour {{nbMessage}} tweets</span>
               </div>
             </form>
           </div>
@@ -60,7 +60,7 @@
             <div class="user-block">
               <img class="img-circle" src="./assets/dist/img/avatar5.png" alt="User Image">
               <span class="username"><a href="#">{{msg.userId}}</a></span>
-              <span class="description">Shared publicly - 7:30 PM Today</span>
+              <span *ngIf="msg.time" class="description">Tweet poste en : {{msg.time}} ms</span>
             </div>
             <!-- /.user-block -->
 

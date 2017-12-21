@@ -18,6 +18,23 @@ public class User {
 	String name;
 	
 	@Persistent
+	String password;	
+	
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	@Persistent
 	@Element(dependent="true")
 	Set<Long> lesGensQuiMeSuit = new HashSet<Long>();// les gens qui me follow
 	

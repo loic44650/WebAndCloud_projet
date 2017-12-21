@@ -1,0 +1,47 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      {{title}}
+    </h1>
+  </section>
+
+  <section class="content" style="background-color: white">
+    <!--<div class="col-md-12">-->
+      <!--<button  (click)="ecrireDesTweets()" class="btn btn-twitter">Ecrire des messages</button>-->
+    <!--</div>-->
+    <div class="col-md-4">
+      Combien de messages a recupere :<br/>
+      <input #vall1 type="number" class="form-control">
+      Nombre de mesure a recupere :<br/>
+      <input #val1 type="number" class="form-control">
+      <button (click)="getTimelineUser100(vall1.value,val1.value)" style="margin-left:15px" class="btn btn-danger">Recuperer des Messages pour 100 abonnements</button>
+      <br/>
+      <div *ngFor="let mes of tabMesure100">
+        <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      Combien de messages a recupere :<br/>
+      <input #vall2 type="number" class="form-control">
+      Nombre de mesure a recupere :<br/>
+      <input #val2 type="number" class="form-control">
+      <button (click)="getTimelineUser1000(vall2.value,val2.value)" style="margin-left:15px" class="btn btn-danger">Recuperer des Messages pour 1000 abonnements</button>
+      <br/>
+      <div *ngFor="let mes of tabMesure1000">
+        <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      Combien de messages a recupere :<br/>
+      <input #vall3 type="number" class="form-control">
+      Nombre de mesure a recupere :<br/>
+      <input #val3 type="number" class="form-control">
+      <button (click)="getTimelineUser2500(vall3.value,val3.value)" style="margin-left:15px" class="btn btn-danger">Recuperer des Messages pour 2500 abonnements</button>
+      <br/>
+      <div *ngFor="let mes of tabMesure2500">
+        <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
+      </div>
+    </div>
+  </section>
+</div>
