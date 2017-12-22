@@ -7,13 +7,11 @@ import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {CalculFollowersComponent} from "./components/CalculFollowers/calculFollowers.compotent";
 import {usersToFollowComponent} from "./components/userstofofollow/userstofollow.component";
 import {testComponent} from "./components/testMessage/testMessage.component";
-import {HomeComponent} from "./components/Home/home.component";
 import {ReadmeComponent} from "./components/readme/readme.component";
 
 const appRoutes : Routes = [
     {path: '', component: DashboardComponent },
     {path : 'login', component : LoginComponent},
-    {path : 'home',component : HomeComponent},
     {path : 'dashboard',component:DashboardComponent},
     {path : '403',component: error403},
     {path : 'profile',component:ProfileComponent},

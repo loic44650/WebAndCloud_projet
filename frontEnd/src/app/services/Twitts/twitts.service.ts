@@ -26,5 +26,9 @@ export class TwittsService{
       +userId.toString()+'?nbDeMessages='+nb.toString());
   }
 
+  getMoreTweets(userId:any,min:any,max:any){
+      return this.http.get('https://1-dot-webcloud-122127.appspot.com/_ah/api/messages/v1/messagesTimeline/'
+        +userId.toString()+'/min/'+min.toString()+'/max/'+max.toString())
+  }
 
 }

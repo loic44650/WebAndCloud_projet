@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit{
     desactiver = true;
     getTimeline = null;
     nbMessage = 15;
+    min = 0;
     constructor(
       private userS : UserService,
       private twitS : TwittsService,
@@ -42,6 +43,8 @@ export class DashboardComponent implements OnInit{
     }
 
     ngOnInit(): void {
+        this.nbMessage = 15;
+        this.min = 0;
         this.getTweets();
         let datefin = new Date();
     }
@@ -70,17 +73,11 @@ export class DashboardComponent implements OnInit{
 
   getTweets() {
     let datedeb = new Date().getTime();
-    console.log("1 :"+datedeb);
     this.twitS.getTwittsForMe(this.id, this.nbMessage).subscribe(
       complete => {
         let datefin =new Date().getTime();
         this.getTimeline = datefin-datedeb;
-        console.log("2 :"+datefin);
-        console.log("3 :"+(datefin-datedeb));
-        console.log(complete.json());
-        for (let i = 0; i < complete.json().items.length; i++) {
-          this.lesMessages.push(new Message(complete.json().items[i].message,complete.json().items[i].userId));
-        }
+        this.lesMessages = complete.json().items;
       },
       err => console.log(err)
     )
@@ -128,12 +125,18 @@ export class DashboardComponent implements OnInit{
         );
       }
     }
-    // events
-    public chartClicked(e:any) :void {
-        console.log(e);
-    }
 
-    public chartHovered(e:any) :void {
-        console.log(e);
+    loadMoreTwett(){
+      this.min = this.nbMessage;
+      this.nbMessage += 15;
+      this.twitS.getMoreTweets(this.id,this.min,this.nbMessage).subscribe(
+        complete => {
+          for (let i = 0; i < complete.json().items.length; ++i) {
+            this.lesMessages.push(complete.json().items[i]);
+          }
+        },
+        err => console.log(err)
+
+      )
     }
 }
