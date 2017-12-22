@@ -93,8 +93,8 @@ export class CalculFollowersComponent implements OnInit{
     this.bool2 = true;
     setTimeout(()=> {
       this.calc2 = new calculMath();
-      this.calc2.moyenne = this.calc1.calculAvg(this.tabMesure1000);
-      this.calc2.variance = this.calc1.calculVar(this.tabMesure1000);
+      this.calc2.moyenne = this.calc2.calculAvg(this.tabMesure1000);
+      this.calc2.variance = this.calc2.calculVar(this.tabMesure1000);
     },30000);
   }
 
@@ -121,8 +121,8 @@ export class CalculFollowersComponent implements OnInit{
     this.bool3 =true;
     setTimeout(()=> {
       this.calc3 = new calculMath();
-      this.calc3.moyenne = this.calc1.calculAvg(this.tabMesure2500);
-      this.calc3.variance = this.calc1.calculVar(this.tabMesure2500);
+      this.calc3.moyenne = this.calc3.calculAvg(this.tabMesure2500);
+      this.calc3.variance = this.calc3.calculVar(this.tabMesure2500);
     },30000);
   }
 
