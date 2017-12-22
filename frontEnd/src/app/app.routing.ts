@@ -7,16 +7,20 @@ import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {CalculFollowersComponent} from "./components/CalculFollowers/calculFollowers.compotent";
 import {usersToFollowComponent} from "./components/userstofofollow/userstofollow.component";
 import {testComponent} from "./components/testMessage/testMessage.component";
+import {HomeComponent} from "./components/Home/home.component";
+import {ReadmeComponent} from "./components/readme/readme.component";
 
 const appRoutes : Routes = [
-    {path: '', component: LoginComponent },
+    {path: '', component: DashboardComponent },
     {path : 'login', component : LoginComponent},
+    {path : 'home',component : HomeComponent},
     {path : 'dashboard',component:DashboardComponent},
-    {path : '403',component: error403,canActivate : [AuthenticationGuard]},
-    {path : 'profile',component:ProfileComponent,canActivate : [AuthenticationGuard]},
-    {path : 'calcul1',component:CalculFollowersComponent,canActivate : [AuthenticationGuard]},
-    {path : 'userstofollow',component:usersToFollowComponent,canActivate :[AuthenticationGuard]},
-    {path : 'testMessages',component:testComponent,canActivate : [AuthenticationGuard]},
+    {path : '403',component: error403},
+    {path : 'profile',component:ProfileComponent},
+    {path : 'calcul1',component:CalculFollowersComponent},
+    {path : 'readme', component:ReadmeComponent},
+    {path : 'userstofollow',component:usersToFollowComponent},
+    {path : 'testMessages',component:testComponent},
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];

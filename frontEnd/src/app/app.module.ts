@@ -25,6 +25,8 @@ import {GoogleApiModule, NG_GAPI_CONFIG, NgGapiClientConfig} from "ng-gapi";
 import {usersToFollowComponent} from "./components/userstofofollow/userstofollow.component";
 import {DatePipe} from "@angular/common";
 import {testComponent} from "./components/testMessage/testMessage.component";
+import {HomeComponent} from "./components/Home/home.component";
+import {ReadmeComponent} from "./components/readme/readme.component";
 
 let gapiClientConfig: NgGapiClientConfig = {
   client_id: "webcloud-122127",
@@ -59,6 +61,8 @@ let gapiClientConfig: NgGapiClientConfig = {
         usersToFollowComponent,
         error403,
         testComponent,
+        HomeComponent,
+        ReadmeComponent
     ],
     bootstrap:    [ AppComponent ],
     providers : [
