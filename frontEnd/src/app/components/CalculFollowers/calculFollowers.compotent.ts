@@ -1,6 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {TwittsService} from "../../services/Twitts/twitts.service";
 import {Message} from "../../models/Message/message.model";
+import {calculMath} from "../../interfaces/calculMath/calculMath";
 
 
 
@@ -24,6 +25,12 @@ export class CalculFollowersComponent implements OnInit{
   tabMesure100 : Mesure[] =[];
   tabMesure1000: Mesure[] =[];
   tabMesure2500 : Mesure[] =[];
+  calc1 : calculMath;
+  calc2 : calculMath;
+  calc3 : calculMath;
+  bool1 = false;
+  bool2 = false;
+  bool3 = false;
   constructor(
     private messageS : TwittsService,
   ){
@@ -31,6 +38,8 @@ export class CalculFollowersComponent implements OnInit{
   }
 
   ngOnInit(){
+    this.bool1 = this.bool2 = this.bool3 = false;
+    this.calc1 = this.calc2 = this.calc3 = null;
 
   }
 
@@ -48,11 +57,16 @@ export class CalculFollowersComponent implements OnInit{
         complete => {
           datefin = new Date().getTime();
           this.tabMesure100.push(new Mesure(i, (datefin - datedeb)));
-
         },
         err =>console.log(err)
       )
     }
+    this.bool1 = true;
+    setTimeout(()=> {
+      this.calc1 = new calculMath();
+      this.calc1.moyenne = this.calc1.calculAvg(this.tabMesure100);
+      this.calc1.variance = this.calc1.calculVar(this.tabMesure100);
+    },30000);
 
   }
 
@@ -76,6 +90,12 @@ export class CalculFollowersComponent implements OnInit{
         err =>console.log(err)
       )
     }
+    this.bool2 = true;
+    setTimeout(()=> {
+      this.calc2 = new calculMath();
+      this.calc2.moyenne = this.calc1.calculAvg(this.tabMesure1000);
+      this.calc2.variance = this.calc1.calculVar(this.tabMesure1000);
+    },30000);
   }
 
 
@@ -98,6 +118,12 @@ export class CalculFollowersComponent implements OnInit{
         err =>console.log(err)
       )
     }
+    this.bool3 =true;
+    setTimeout(()=> {
+      this.calc3 = new calculMath();
+      this.calc3.moyenne = this.calc1.calculAvg(this.tabMesure2500);
+      this.calc3.variance = this.calc1.calculVar(this.tabMesure2500);
+    },30000);
   }
 
 

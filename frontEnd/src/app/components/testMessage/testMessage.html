@@ -17,6 +17,8 @@
       <input #val1 type="number" class="form-control">
       <button (click)="getTimelineUser100(vall1.value,val1.value)" style="margin-left:15px" class="btn btn-danger">Recuperer des Messages pour 100 abonnements</button>
       <br/>
+      <div *ngIf="bool1">La moyenne et la variance sont calcules dans 25 secondes</div>
+      <div style="margin: 2px" *ngIf="calc1">Moyenne : {{calc1.moyenne}}, variance : {{calc1.variance}}</div>
       <div *ngFor="let mes of tabMesure100">
         <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
       </div>
@@ -28,6 +30,8 @@
       <input #val2 type="number" class="form-control">
       <button (click)="getTimelineUser1000(vall2.value,val2.value)" style="margin-left:15px" class="btn btn-danger">Recuperer des Messages pour 1000 abonnements</button>
       <br/>
+      <div *ngIf="bool2">La moyenne et la variance sont calcules dans 25 secondes</div>
+      <span style="margin: 2px" *ngIf="calc2">Moyenne : {{calc2.moyenne}}, variance : {{calc2.variance}}</span>
       <div *ngFor="let mes of tabMesure1000">
         <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
       </div>
@@ -39,6 +43,8 @@
       <input #val3 type="number" class="form-control">
       <button (click)="getTimelineUser2500(vall3.value,val3.value)" style="margin-left:15px" class="btn btn-danger">Recuperer des Messages pour 2500 abonnements</button>
       <br/>
+      <div *ngIf="bool3">La moyenne et la variance sont calcules dans 25 secondes</div>
+      <span style="margin: 2px" *ngIf="calc3">Moyenne : {{calc3.moyenne}}, variance : {{calc3.variance}}</span>
       <div *ngFor="let mes of tabMesure2500">
         <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
       </div>

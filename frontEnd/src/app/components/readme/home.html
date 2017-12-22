@@ -1,14 +1,9 @@
-<div class="content-wrapper">
-  <section class="content" style="text-align:justify">
-<h1>WebAndCloud_projet</h1>
-<p>Ce qu&#39;il faudra pas oublier :</p>
-<p>Un summary de l&#39;API avec un lien vers
-  Résumé des tests avec des liens vers
-  Détails d&#39;implémentations :   pourquoi message est comme ça, pourquoi messageIndex, user, expliquer ce qui est chiant avec la rétroactivité</p>
-<h1>Projet Web &amp; Cloud</h1>
+<div class="content-wrapper" style="background-color: white">
+  <section class="content" >
+  <h1>Projet Web &amp; Cloud</h1>
 <p>Ceci est le dépot github associé à notre projet de web and cloud.</p>
 <p>Jehanno Clément<br/>
-  Phalavandishivli (dsl deme) Demetre <br/>
+  Phalavandishvili Demetre <br/>
   Duclos Romain<br/>
   Mahier Loïc<br/></p>
 <p>M1-ALMA 2017-2018<br/></p>
@@ -25,6 +20,11 @@
     </ul>
   </li>
   <li><p><a href='#Tests'>Tests</a></p>
+    <ul>
+      <li><a href='#post_twitt'>Post d&#39;un tweet</a></li>
+      <li><a href='#recup_tweet'>Récupération des tweets</a></li>
+
+    </ul>
   </li>
   <li><p><a href='#scale'>Scalability</a></p>
   </li>
@@ -33,88 +33,132 @@
 
 </ul>
 <h2><a name="presentation"></a>Présentation du sujet</h2>
-<p>Le sujet est disponible <a href='https://docs.google.com/document/d/1wVf1dWzbmxp5wtJd_I9kAHpke29FpPqe8mPOCv3J1mM/edit#'>ici</a>.</p>
+<p>
+  <ul>
+    <li>Le sujet est disponible <a href='https://docs.google.com/document/d/1wVf1dWzbmxp5wtJd_I9kAHpke29FpPqe8mPOCv3J1mM/edit#'>ici</a></li>
+    <li>Lien de l&#39;API : <a href='https://apis-explorer.appspot.com/apis-explorer/?base=https://1-dot-webcloud-122127.appspot.com/_ah/api#p/' target='_blank' >https://apis-explorer.appspot.com/apis-explorer/?base=https://1-dot-webcloud-122127.appspot.com/_ah/api#p/</a></li>
+    <li>Lien de l&#39;application web : <a href='http://1-dot-webcloud-122127.appspot.com/' target='_blank' >http://1-dot-webcloud-122127.appspot.com/</a></li>
+    <li>La partie Front du projet est réalisé en Angular 2</li>
+  </ul>
 <h2><a name="details"></a> Détails d&#39;implémentation</h2>
-<p>Dans cette section nous allons expliquer certaines de nos classes ainsi que quelques décisions que nous avons prises qui ont donc influencé la construction du code.</p>
+<p>Dans cette section, nous allons expliquer certaines de nos classes ainsi que quelques décisions prises ayant influencées la construction du code.</p>
 <h3><a name="user"></a> La classe User</h3>
-<p>Avant d&#39;aller plus loin il faut que nous expliquions comment la classe User est définie</p>
-<!--<pre><code>@PersistenceCapable(identityType=IdentityType.APPLICATION)-->
-<!--public class User {-->
-
-	<!--@PrimaryKey-->
-	<!--@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)-->
-	<!--Key key;-->
-
-	<!--@Persistent-->
-	<!--String name;-->
-
-	<!--@Persistent-->
-	<!--@Element(dependent=&quot;true&quot;)-->
-	<!--Set&lt;Long&gt; lesGensQuiMeSuit = new HashSet&lt;Long&gt;();// les gens qui me follow-->
-
-	<!--@Persistent-->
-	<!--@Element(dependent=&quot;true&quot;)-->
-    <!--Set&lt;Long&gt; lesGensQueJeSuit = new HashSet&lt;Long&gt;();-->
-<!--}-->
-<!--</code></pre>-->
+<p>Avant d&#39;aller plus loin, il faut que nous expliquions comment la classe User est définie.</p>
+<code>@PersistenceCapable(identityType=IdentityType.APPLICATION)<br/>
+public class User<br/>
+	@PrimaryKey<br/>
+	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)<br/>
+	Key key;<br/>
+	@Persistent<br/>
+	String name;<br/>
+	@Persistent<br/>
+	@Element(dependent=&quot;true&quot;)<br/>
+	Set&lt;Long&gt; lesGensQuiMeSuit = new HashSet&lt;Long&gt;();// les gens qui me follow<br/>
+	@Persistent<br/>
+	@Element(dependent=&quot;true&quot;)<br/>
+  Set&lt;Long&gt; lesGensQueJeSuit = new HashSet&lt;Long&gt;();<br/>
+</code>
 <p>La classe User va contenir un nom d&#39;utilisateur et une clé pour l&#39;identifier de manière unique. <br/>
-  Dans l&#39;idée on pourrait aussi rajouter une photo de profil, une description, etc. Tout ce qui est relatif à l&#39;utilisateur en lui-même.<br/>
-  Les champs &quot;lesGensQueJeSuit&quot; et &quot;lesGensQuiMeSuit&quot; sont importants. Au premier abord on pourrait penser que uniquement le fait de suivre quelqu&#39;un est suffisant. Ainsi on aurait juste un champ &quot;lesGensQueJeSuit&quot;. Se pose ensuite la question de savoir &quot;A qui je dois envoyer un messsage quand je poste ?&quot;. <br/>
-  La première idée implique que nous parcourions <strong>tous</strong> les utilisateurs de la base pour aller regarder dans leur liste de follows si il faut envoyer à cet utilisateur ou non. Sur l&#39;exemple de twitter, Rihanna a 84M d&#39;abonnés, twitter recense 330M d&#39;utilisateurs aux dernières nouvelles. <br/>
-  Avec notre implémentation nous estimons qu&#39;il vaut mieux avoir une liste de 84M d&#39;abonnés qu&#39;en parcourir 330M a <strong>chaque</strong> fois, car la personne qui n&#39;a &quot;que&quot; 1M de follower, on va parcourir 1M au lieu de 330M. Encore une fois il s&#39;agit de perdre en taille pour gagner en temps d’exécution. <br/></p>
+  Dans l&#39;idée, nous pourrions aussi rajouter une photo de profil, une description, etc. Tout ce qui est relatif à l&#39;utilisateur en lui-même.<br/>
+  Les champs &quot;lesGensQueJeSuit&quot; et &quot;lesGensQuiMeSuit&quot; sont importants. Au premier abord, nous pourrions penser que le seul fait de suivre quelqu&#39;un est suffisant. Ainsi, nous aurions juste un champ &quot;lesGensQueJeSuit&quot;. Se pose ensuite la question : &quot;A qui dois-je envoyer un messsage quand je poste ?&quot;. <br/>
+  La première idée implique que nous parcourions <strong>tous</strong> les utilisateurs de la base pour aller regarder dans leur liste de follow si il faut envoyer à cet utilisateur ou non. Sur l&#39;exemple de twitter, Rihanna a 84M d&#39;abonnés, twitter recense 330M d&#39;utilisateurs aux dernières nouvelles. <br/>
+  Avec notre implémentation nous estimons qu&#39;il vaut mieux avoir une liste de 84M d&#39;abonnés que d&#39;en parcourir 330M a <strong>chaque</strong> fois. Ainsi pour une personne qui n&#39;a &quot;que&quot; 1M de follower, nous allons parcourir 1M de follower au lieu de 330M. Encore une fois, il s&#39;agit de perdre en taille pour gagner en temps d’exécution. <br/></p>
 <h3><a name="message"></a> La classe Message</h3>
 <p>Voici comment nous avons organisé notre classe Message :</p>
-<!--<pre><code>public class Message {
-</code></pre>
-<pre><code>    @PrimaryKey-->
-    <!--@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)-->
-    <!--private Key msgId;-->
-
-    <!--@Persistent-->
-    <!--private Long userId;-->
-
-    <!--@Persistent-->
-    <!--private String message;-->
-<!--}-->
-<!--</code></pre>-->
-<p>Fondamentalement un message va contenir une clé comme identifiant unique ainsi que l&#39;id de l&#39;User qui posté ce message.
-  La classe message ne sert que à envoyer du texte, on pourrait très bien y ajouter des photos, des gifs, des vidéos, etc. Qu&#39;importe.
-  Cependant ce qui nous importe c&#39;est ce que nous avons vu dans la classe User : lorsqu&#39;un utilisateur poste un message il faut savoir à qui l&#39;envoyer, hors l&#39;information n&#39;est pas définie ici. Nous avons crée une classe messageIndex sur laquelle nous allons revenir car c&#39;est elle qui importe.</p>
+<code>public class Message<br/>
+ @PrimaryKey<br/>
+    @Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)<br/>
+    private Key msgId;<br/>
+    @Persistent<br/>
+    private Long userId;<br/>
+    @Persistent<br/>
+    private String message;<br/>
+</code>
+<p>Fondamentalement, un message va contenir une clé comme identifiant unique ainsi que l&#39;id du User qui à posté ce message.
+  La classe Message ne sert qu&#39;à envoyer du texte, nous pourrions très bien y ajouter des photos, des gifs, des vidéos, etc.
+  Cependant, ce qui nous importe est ce que nous avons vu dans la classe User : lorsqu&#39;un utilisateur poste un message, il faut savoir à qui l&#39;envoyer. Hors, l&#39;information n&#39;est pas définie ici. Nous avons pour y remedier créé une classe MessageIndex.</p>
 <h3><a name="messageIndex"></a> La classe Message Index</h3>
-<!--<pre><code>@PersistenceCapable(identityType=IdentityType.APPLICATION)-->
-<!--public class MessageIndex{-->
-	<!--@PrimaryKey-->
-	<!--@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)-->
-	<!--Key k;-->
-
-	<!--@Persistent-->
-	<!--Message msg;-->
-
-	<!--@Persistent-->
-	<!--long timestamp;-->
-
-	<!--@Persistent-->
-    <!--Set&lt;Long&gt; receivers = new HashSet&lt;Long&gt;();-->
-<!--}-->
-<!--</code></pre>-->
-<p>
-    La classe messageIndex est primordiale pour scale. <br/>
-  Nous avons vu en cours que ce qui nous importe c&#39;est que nos requêtes soient rapides et pour se faire il ne faut pas déseraliser et sérialiser l&#39;intégralité du message (body, photos, etc.) si vous êtes novices vous trouverez des informations complémentaires
-  <a href='https://www.youtube.com/watch?v=AgaL6NGpkB8'>ici</a>. <br/>
-  Donc il nous faut scale. C&#39;est pourquoi nous avons la classe messageIndex. Sauf que nous avons quelques petits détails supplémentaires, c&#39;est ce sur quoi nous allons revenir dans cette section. <br/>
-  La clé est l&#39;identificateur unique ici. Le message quand à lui peut surprendre ici. En fait la relation de &quot;parenté&quot; dans le cloud définie par les entity groups (comme expliqué dans la vidéo plus haut) est gérée automatiquement par le JDO de cette manière. Une autre option consistait à définir deux entitées message et messageIndex puis les push en spécifiant que message est le parent de messageIndex, mais le JDO le fait et c&#39;est plus simple. <br/>
-  Le timestamp nous permet juste de pouvoir faire les requêtes demandées quand on nous demande d&#39;afficher les 10 <strong>derniers</strong> messages il faut bien savoir quels sont ces 10 derniers donc on rajoute un long qui est géré à la création du message (cf code). <br/>
-  Les receivers sont les personnes à qui sont destinés le message, c&#39;est pour ça qu&#39;on a besoin de la liste de qui nous follow dans User. Donc on se base sur ça et on n&#39;oublie pas de se rajouter afin de voir nos propores tweets (eh oui). <br/>
-  Un autre petit détail : ici quand on parle du timestamp on met sous tapis le fait que en l&#39;état la requête ne fonctionne pas comme ça : pour savoir quels sont les 10 derniers messages d&#39;un utilisateur il faut bien 2 choses : les 10 <strong>derniers</strong> destiné à <strong>l&#39;utilisateur</strong> donc pour faire cette requête on a besoin d&#39;un index multivalué sur ces deux champs. <br/>
-</p>
-<h2><a name="API"></a> Tests</h2>
+<code>@PersistenceCapable(identityType=IdentityType.APPLICATION)<br/>
+public class MessageIndex<br/>
+	@PrimaryKey<br/>
+	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)<br/>
+	Key k;<br/>
+	@Persistent<br/>
+	Message msg;<br/>
+	@Persistent<br/>
+	Long userId;<br/>
+	@Persistent<br/>
+	long timestamp;<br/>
+	@Persistent<br/>
+	Set&lt;Long&gt; receivers = new HashSet&lt;Long&gt;();<br/>
+</code>
+<p>La classe messageIndex est primordiale pour passer à l&#39;échelle. <br/>
+  Nous avons vu en cours que nos requêtes doivent être rapides, pour ce faire il ne faut pas déseraliser et sérialiser l&#39;intégralité du message (body, photos, etc.). Si vous êtes novices vous trouverez des informations complémentaires <a href='https://www.youtube.com/watch?v=AgaL6NGpkB8'>ici</a>. <br/>
+  C&#39;est pourquoi nous avons la classe MessageIndex, avec quelques petits details supplémentaires :
+  La clé est l&#39;identificateur unique. Le fait que le message soit présent ici peut surprendre. En fait, la relation de &quot;parenté&quot; dans le cloud définie par les Entity Group (comme expliqué dans la vidéo plus haut) est gérée automatiquement par le JDO de cette manière. Une autre option consistait à définir deux entitées Message et MessageIndex puis à les push en spécifiant que Message est le parent de MessageIndex. Cependant, le JDO le fait et c&#39;est plus simple. <br/></p>
+<p>Le userId ici est plus qu&#39;étonnant car il faudrait le laisser dans la classe message. Cependant, nous avons un problème quand il faut gérer la rétroactivité des messages. Si un utilisateur en follow un autre, il faut qu&#39;il puisse voir les anciens tweet de la personne qu&#39;il vient de follow. Pour faire cela, il faut parcourir tous les messages, trouver l&#39;id de la bonne personne (afin de savoir quels sont ses messages) et ajouter à la liste des receiver la personne qui vient de le suivre. Or, si nous laissons le userID dans le message, il va falloir le désérialiser entièrement (y compris le body). Mais nous perdons alors trop de temps, nous avons donc décidé de le descendre dans messageIndex. <br/></p>
+<p>Le timestamp nous permet juste de faire les requêtes demandées. Quand on nous demande d&#39;afficher les 10 derniers messages, il faut pouvoir identifier l&#39;ordre de parution des messages. Nous rajoutons donc un Timestamp qui est instancié à la création du message. <br/>
+  Les receiver sont les personnes à qui sont destiné le message, c&#39;est pour cela que nous avons besoin de la liste de nos follower dans User. Donc nous nous basons sur cette liste, puis nous nous rajoutons afin de voir nos propores tweets. <br/>
+  Un autre petit détail : quand nous parlons du timestamp, nous ommettons de dire que cela ne fonctionne pas comme ça. Pour savoir quels sont les 10 derniers messages d&#39;un utilisateur, il faut bien 2 choses : les 10 <strong>derniers</strong> destinés à <strong>l&#39;utilisateur</strong>. Pour faire cette requête, nous avons besoin d&#39;un index multivalué sur ces deux champs. <br/></p>
+<h2><a name="Tests"></a> Tests</h2>
+<p>Désormais il s&#39;agit de mesurer nos temps d&#39;exécution.</p>
+<p>Avant toute chose, il était demandé de faire des tests dans des configurations maximales de 5000 followers/abonnements. Hors, afin de pouvoir tester correctement, et au vu des quotas assignés par Google, nous ne pourrons tester que pour des configurations maximales de 2500 personnes. </p>
+<p>Pour rappel, il est attendu que nous mesurions :</p>
+<p>_ Pour une personne <strong>suivie par</strong> 100, 1000 et 2500 personnes le temps d&#39;exécution pour poster, en moyenne, 10 tweets.</p>
+<p>_ Pour une personne <strong>qui suit</strong> 100, 1000 et 2500 personnes le temps d&#39;exécution moyen pour récupérer ses 10, 50 et 100 derniers messages.</p>
+<p>Une interface dynamique pour ces tests est disponible sur l&#39;application web dans l&#39;onglet <a href='http://1-dot-webcloud-122127.appspot.com/calcul1'>Calcul Follow</a> et <a href='http://1-dot-webcloud-122127.appspot.com/testMessages'>Test Messages</a>. </p>
+<p>Aussi avant d&#39;aller plus loin, il faut revenir sur un point important : au niveau des temps d&#39;exécutions, les premiers appels sont complètements faussés (démarrage des VM, premier accès plus lent, etc). Avec la monté en charge (de plus en plus de requête), nos résultats sont plus cohérents mais apparraissent aussi des anomalies.</p>
+<p>Nous avons donc enlevé ces résultats qui s&#39;éloignent vraiment trop pour nos calculs de moyennes, variances et écart-type.</p>
+<h3><a name="post_twitt" ></a>Post d&#39;un tweet</h3>
+<p>Nous avons posté pour chaque configuration 15 messages et nous avons récupéré le temps que cela prenait pour chaque message :</p>
+<p><img src='https://raw.githubusercontent.com/loic44650/WebAndCloud_projet/master/srcImg/calcul%20post%20tweet.png' alt='Image pour récupérer les 15 derniers messages suivant la configuration' /></p>
+<p>Résultats :</p>
+<figure><table>
+  <thead>
+  <tr><th style='text-align:center;' >Nombre de followers</th><th style='text-align:center;' >100</th><th style='text-align:center;' >1000</th><th style='text-align:center;' >2500</th></tr></thead>
+  <tbody><tr><td style='text-align:center;' >Moyenne (en ms)</td><td style='text-align:center;' >286.2</td><td style='text-align:center;' >326</td><td style='text-align:center;' >795,64286</td></tr><tr><td style='text-align:center;' >Variance</td><td style='text-align:center;' >2942,1598492224</td><td style='text-align:center;' >3190,60041316</td><td style='text-align:center;' >16989,0864939961</td></tr><tr><td style='text-align:center;' >Ecart type (en ms)</td><td style='text-align:center;' >54,24168</td><td style='text-align:center;' >56,4854</td><td style='text-align:center;' >130,34219</td></tr></tbody>
+</table></figure>
 <p>&nbsp;</p>
+<h3><a name="recup_tweet" ></a> Récupération des tweet</h3>
+<p>Pour remplir cette section, nous avons écrit 1 message par utilisateur dans la base.</p>
+<p>Il faut donc suivant les configurations de follower, récupérer les 10, 50, et 100 derniers messages.</p>
+<p>Les tests ne seront effectués que sur 15 mesures pour ne pas atteindre les quotas trop rapidement.</p>
+<h6>Récupérer 10 tweet en fonction du nombre d&#39;abonnements</h6>
+<p><img width="80%" src='https://raw.githubusercontent.com/loic44650/WebAndCloud_projet/master/srcImg/Calcul%20recup%2010%20messages.png' alt='Lien de l&#39;image test 10 derniers messages' /></p>
+<figure><table>
+  <thead>
+  <tr><th style='text-align:center;' >Nombre d&#39;abonnements</th><th style='text-align:center;' >100</th><th style='text-align:center;' >1000</th><th style='text-align:center;' >2500</th></tr></thead>
+  <tbody><tr><td style='text-align:center;' >Moyenne (en ms)</td><td style='text-align:center;' >508,06667</td><td style='text-align:center;' >582,16667</td><td style='text-align:center;' >781</td></tr><tr><td style='text-align:center;' >Variance (en ms)</td><td style='text-align:center;' >28559,9285500489</td><td style='text-align:center;' >25732,3049029264</td><td style='text-align:center;' >29753,8660977481</td></tr><tr><td style='text-align:center;' >Ecart type (en ms)</td><td style='text-align:center;' >168,99683</td><td style='text-align:center;' >160,41292</td><td style='text-align:center;' >172,49309</td></tr></tbody>
+</table></figure>
+<h6>Récupérer 50 tweet en fonction du nombre d&#39;abonnements</h6>
+<p><img  width="80%" src='https://raw.githubusercontent.com/loic44650/WebAndCloud_projet/master/srcImg/Calcul%2050%20messages.png' alt='Lien de l&#39;image test 50 derniers messages' /></p>
+<figure><table>
+  <thead>
+  <tr><th style='text-align:center;' >Nombre d&#39;abonnements</th><th style='text-align:center;' >100</th><th style='text-align:center;' >1000</th><th style='text-align:center;' >2500</th></tr></thead>
+  <tbody><tr><td style='text-align:center;' >Moyenne (en ms)</td><td style='text-align:center;' >925</td><td style='text-align:center;' >699.7</td><td style='text-align:center;' >712,42857</td></tr><tr><td style='text-align:center;' >Variance (en ms)</td><td style='text-align:center;' >54094,9216639225</td><td style='text-align:center;' >79206,2108385604</td><td style='text-align:center;' >61489,81521796</td></tr><tr><td style='text-align:center;' >Ecart type (en ms)</td><td style='text-align:center;' >232,58315</td><td style='text-align:center;' >281,43598</td><td style='text-align:center;' >247,9714</td></tr></tbody>
+</table></figure>
+<h6>Récupérer 100 tweet en fonction du nombre d&#39;abonnements</h6>
+<p><img  width="80%"src='https://raw.githubusercontent.com/loic44650/WebAndCloud_projet/master/srcImg/Calcul%20100%20messages.png' alt='Lien de l&#39;image test 100 derniers messages' /></p>
+<figure><table>
+  <thead>
+  <tr><th style='text-align:center;' >Nombre d&#39;abonnements</th><th style='text-align:center;' >100</th><th style='text-align:center;' >1000</th><th style='text-align:center;' >2500</th></tr></thead>
+  <tbody><tr><td style='text-align:center;' >Moyenne (en ms)</td><td style='text-align:center;' >1461,57143</td><td style='text-align:center;' >1921,36364</td><td style='text-align:center;' >2172,55556</td></tr><tr><td style='text-align:center;' >Variance (en ms)</td><td style='text-align:center;' >242634,6721877521</td><td style='text-align:center;' >183378,7746271504</td><td style='text-align:center;' >204808,2455505025</td></tr><tr><td style='text-align:center;' >Ecart type (en ms)</td><td style='text-align:center;' >492,57961</td><td style='text-align:center;' >428,22748</td><td style='text-align:center;' >452,55745</td></tr></tbody>
+</table></figure>
 <h2><a name="scale"></a> Scalability</h2>
-<h4>Est-ce qu&#39;on scale ? <br/></h4>
-<p>
-  C&#39;est la question qu&#39;on se pose.
-  La réponse est oui, clairement.
-  Nos messages vont scales grâce à messageIndex en fait c&#39;est tout l&#39;intérêt de faire ça. Dans les faits il est possible de faire pareil pour nos users mais ici ce n&#39;est pas utile car notre utilisateur n&#39;a &quot;que&quot; un nom, si il avait une photo de profil, une description, une bannière, un site, etc. Il serait <del>intéressant</del> nécessaire de faire la même chose pour scale correctement.
-</p>
+<h4>Résumé des performances <br/></h4>
+<p>Tout d&#39;abord, il faut noter que nos résultats ne sont que des échantillons et ne sont pas forcément représentatifs. Mais ils suffisent pour exhiber notre scalabilité. </p>
+<p>Aussi, nous avons l&#39;impression que Google bloque parfois les requêtes ou les ralentits fortement. Les serveurs sont également indisponibles de temps en temps. Cela nous semble légitime, nous utilisons un services gratuit ce qui ne nous assure pas d&#39;un fonctionnement 100% optimal.</p>
+<p>Résumé des performances pour poster un tweet en fonction des gens qui nous suivent :</p>
+<p><img width="70%" src='https://raw.githubusercontent.com/loic44650/WebAndCloud_projet/master/srcImg/graphe2.png' alt='Résumé des performances pour poster un tweet en fonction des gens qui nous suivent' /></p>
+<p>Nous observons que suivant le nombre de personnes qui nous suivent, les temps augmentent rapidement mais reste raisonnables : moins de 1 sec en moyenne pour tweet à 2500 personnes. A priori les temps semblent augmenter, mais même à une échelle supérieur, la scalability fera que la diférence ne sera pas si grande.</p>
+<p>Résumé des performances pour la récupération des tweet :</p>
+<p><img width="70%" src='https://raw.githubusercontent.com/loic44650/WebAndCloud_projet/master/srcImg/graphe.png' alt='résumé des performances pour la récupération des tweets ' /></p>
+<p>Les résultats de performance que nous obtenons à première vu semblent un peu long, mais en réalité, récupérer 100 tweet avec 2500 abonnements en 2 secondes reste relativement correct. Etant donné qu&#39;il n&#39;y a pas un écart énorme entre une récupération de 100 tweet avec 100, 1000 et 2500 abonnements, nous pouvons dire que l&#39;application passe à l&#39;échelle. Du fait de nos quotas limités, il est difficile de mettre en avant des résultats très satisfaisants. En effet nous n&#39;avons pas pu effectuer autant de test que l&#39;aurions souhaité. Mais nous avons réussi à obtenir des temps de réponse bien meilleur que ceux mesurés dans le rapport.</p>
+<p>Finalement, la question est :</p>
+<h4>Est-ce que cela scale ? <br/></h4>
+<p>D&#39;après les graphiques qui résument les performances de l&#39;API : oui.</p>
+<p>Nos messages vont scale grâce à MessageIndex, en fait c&#39;est tout l&#39;intérêt de cette classe. Dans les faits, il est possible de faire pareil pour nos user, mais ici ce n&#39;est pas utile car notre utilisateur n&#39;a &quot;que&quot; un nom. En effet, si il avait une photo de profil, une description, une bannière, etc,il serait <del>intéressant</del> nécessaire de faire la même chose pour scale correctement.</p>
+<h2><a name="conclusion"></a> Conclusion</h2>
+<p>Au final, nous pensons avoir deployé une application web qui passe à l&#39;échelle. Nous avons eu quelques difficultés techniques tout au long du projet mais l&#39;épreuve principale était de faire fonctionner nos services pour des milliers d&#39;utilisateurs. Nous avons pu remarquer à quel point vouloir faire une application qui passe à l&#39;échelle peut couter cher pour un datastore (quota rempli en quelques tests). Cela nous donne aussi une idée de la complexité et du coup des applications comme Twitter ou Facebook qui doivent gérer des millions de données.</p>
   </section>
 </div>

@@ -3,6 +3,7 @@ import {TwittsService} from "../../services/Twitts/twitts.service";
 import {UserService} from "../../services/User/user.services";
 import {Message} from "../../models/Message/message.model";
 import {Mesure} from "../CalculFollowers/calculFollowers.compotent";
+import {calculMath} from "../../interfaces/calculMath/calculMath";
 
 @Component({
   moduleId : module.id,
@@ -20,16 +21,21 @@ export class testComponent implements OnInit{
   tabMesure2500 : Mesure[] =[];
 
   title = "Test de recupere les tweets";
-
+  calc1 : calculMath;
+  calc2 : calculMath;
+  calc3 : calculMath;
+  bool3 = false;
+  bool2 = false;
+  bool1 = false;
   constructor(
     private msgService : TwittsService,
     private userS : UserService,
   ){
-
   }
 
   ngOnInit(){
-
+      this.bool1 = this.bool2 = this.bool3 = false;
+      this.calc1 = this.calc2 = this.calc3 = null;
   }
 
   ecrireDesTweets(){
@@ -57,12 +63,17 @@ export class testComponent implements OnInit{
       this.msgService.getTwittsForMe(this.user100, val).subscribe(
         complete => {
           let dateFin = new Date().getTime();
-          console.log(complete.json())
           this.tabMesure100.push(new Mesure(i+1,(dateFin-dateDeb)));
         },
         err => console.log(err)
       )
     }
+    this.bool1 = true;
+    setTimeout(()=> {
+      this.calc1 = new calculMath();
+      this.calc1.moyenne = this.calc1.calculAvg(this.tabMesure100);
+      this.calc1.variance = this.calc1.calculVar(this.tabMesure100);
+    },30000);
   }
 
   getTimelineUser1000(val:any,nbMesure : any){
@@ -72,12 +83,21 @@ export class testComponent implements OnInit{
       this.msgService.getTwittsForMe(this.user1000, val).subscribe(
         complete => {
           let dateFin = new Date().getTime();
-          console.log(complete.json())
           this.tabMesure1000.push(new Mesure(i + 1, (dateFin - dateDeb)));
         },
         err => console.log(err)
       )
     }
+    this.bool2 = true;
+    setTimeout(()=> {
+      this.calc2 = new calculMath();
+      this.calc2.moyenne = this.calc2.calculAvg(this.tabMesure1000);
+      this.calc2.variance = this.calc2.calculVar(this.tabMesure1000);
+    },30000);
+  }
+
+  calculMoyenne(){
+
   }
 
   getTimelineUser2500(val:any,nbMesure:any) {
@@ -87,11 +107,16 @@ export class testComponent implements OnInit{
       this.msgService.getTwittsForMe(this.user2500, val).subscribe(
         complete => {
           let dateFin = new Date().getTime();
-          console.log(complete.json())
           this.tabMesure2500.push(new Mesure(i + 1, (dateFin - dateDeb)));
         },
         err => console.log(err)
       )
     }
+    this.bool3 = true;
+    setTimeout(()=> {
+      this.calc3 = new calculMath();
+      this.calc3.moyenne = this.calc3.calculAvg(this.tabMesure2500);
+      this.calc3.variance = this.calc3.calculVar(this.tabMesure2500);
+    },30000);
   }
 }

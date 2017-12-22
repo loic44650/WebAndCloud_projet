@@ -1,4 +1,4 @@
-<div class="content-wrapper">
+<div class="content-wrapper" style="background-color: white">
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
@@ -12,6 +12,7 @@
         <input #val type="number" class="form-control">
         <button (click)="faitMoiDeMesure100(val.value)" style="margin-left:15px" class="btn btn-danger">Poster un tweet pour un utilisateur avec 100 follower</button>
         <br/>
+      <div *ngIf="bool1">La moyenne et la variance sont calcules dans 25 secondes</div>        <div style="margin: 2px" *ngIf="calc1">Moyenne : {{calc1.moyenne}}, variance : {{calc1.variance}}</div>
         <div *ngFor="let mes of tabMesure100">
           <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
         </div>
@@ -21,6 +22,7 @@
         <input #val2 type="number" class="form-control">
         <button (click)="faitMoiDeMesure1000(val2.value)" style="margin-left:15px" class="btn btn-danger">Poster un tweet pour un utilisateur avec 1000 follower</button>
         <br/>
+      <div *ngIf="bool2">La moyenne et la variance sont calcules dans 25 secondes</div>      <div style="margin: 2px" *ngIf="calc2">Moyenne : {{calc2.moyenne}}, variance : {{calc2.variance}}</div>
         <div *ngFor="let mes of tabMesure1000">
           <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
         </div>
@@ -30,6 +32,8 @@
         <input #val3 type="number" class="form-control">
         <button (click)="faitMoiDeMesure2500(val3.value)" style="margin-left:15px" class="btn btn-danger">Poster un tweet pour un utilisateur avec 2500 follower</button>
         <br/>
+      <div *ngIf="bool3">La moyenne et la variance sont calcules dans 25 secondes</div>
+      <div style="margin: 2px" *ngIf="calc3">Moyenne : {{calc3.moyenne}}, variance : {{calc3.variance}}</div>
         <div *ngFor="let mes of tabMesure2500">
           <span class="form-control">{{mes.index}} : {{mes.tps}}</span>
         </div>
