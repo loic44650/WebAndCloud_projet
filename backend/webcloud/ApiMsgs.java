@@ -1,7 +1,6 @@
 package webcloud;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Set;
 
@@ -55,40 +54,48 @@ public class ApiMsgs {
 	
 	@SuppressWarnings("unchecked")
 	@ApiMethod(name="getMesMessages",httpMethod="get",path="users/{userID}/messages")
-	public List<Message> getMesMessages(@Named("userID") Long id,@Named("nbTwitt") Long nbLimit){
+	public List<MessageIndex> getMesMessages(@Named("userID") Long id,@Named("nbTwitt") Long nbLimit){
 		PersistenceManager pm = getPersistenceManager();
-		List<MessageIndex> msgIndex;
-		List<Message> msgs = new ArrayList<>();
+		//List<MessageIndex> msgIndex;
+		//List<Message> msgs = new ArrayList<>();
 		Query query = pm.newQuery(MessageIndex.class);
 		// on recupere tous les MessageIndex
 		query.setFilter("userId	 =="+id	);
 		query.setOrdering("timestamp desc");
 		query.setRange(0,nbLimit);
-		msgIndex = (List<MessageIndex>) query.execute();
-		for ( MessageIndex index : msgIndex){
-				msgs.add(index.getMessage());
-		}
-		return msgs;
+		return (List<MessageIndex>) query.execute();
 	}
 	
 	@SuppressWarnings("unchecked")
 	@ApiMethod(name="getMyTimeline",httpMethod="get",path="messagesTimeline/{userID}")
-	public List<Message> getMyTimeline(@Named("userID") Long idUser,@Named("nbDeMessages") Long nbMsg)
+	public List<MessageIndex> getMyTimeline(@Named("userID") Long idUser,@Named("nbDeMessages") Long nbMsg)
 	{
 		PersistenceManager pm = getPersistenceManager();
-		List<MessageIndex> msgIndex;
-		List<Message> msgs = new ArrayList<>();
+		//List<MessageIndex> msgIndex;
+		//List<Message> msgs = new ArrayList<>();
 		Query query = pm.newQuery(MessageIndex.class);
 		// on recupere tous les MessageIndex
 		query.setFilter("receivers =="+idUser);
 		query.setOrdering("timestamp desc");
 		query.setRange(0,nbMsg);
-		msgIndex = (List<MessageIndex>) query.execute();
-		for ( MessageIndex index : msgIndex){
-				msgs.add(index.getMessage());
-		}
-		return msgs;		
+		return (List<MessageIndex>) query.execute();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@ApiMethod(name="getMoreTweet",httpMethod="get",path="messagesTimeline/{userID}/min/{Min}/max/{Max}")
+	public List<MessageIndex> getMoreTweet(@Named("userID") Long idUser,@Named("Min") Long min,@Named("Max") Long max)
+	{
+		PersistenceManager pm = getPersistenceManager();
+		//List<MessageIndex> msgIndex;
+		//List<Message> msgs = new ArrayList<>();
+		Query query = pm.newQuery(MessageIndex.class);
+		// on recupere tous les MessageIndex
+		query.setFilter("receivers =="+idUser);
+		query.setOrdering("timestamp desc");
+		query.setRange(min,max);
+		return (List<MessageIndex>) query.execute();	
+	}
+	
 	
 	private static PersistenceManager getPersistenceManager() {
 		return PMF.get().getPersistenceManager();

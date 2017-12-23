@@ -11,6 +11,7 @@ import com.google.api.server.spi.config.ApiMethod;
 @Api(name = "auth",version="v1")
 public class ApiAuth {
 	
+	@SuppressWarnings("unchecked")
 	@ApiMethod(name="getSession",httpMethod="post",path="session")
 	public Auth getSession(User user) throws Exception{
 		Auth auth = null;

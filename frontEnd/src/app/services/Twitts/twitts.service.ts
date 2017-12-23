@@ -23,12 +23,12 @@ export class TwittsService{
   getTwittsForMe(userId: any,nb:any)
   {
     return this.http.get('https://1-dot-webcloud-122127.appspot.com/_ah/api/messages/v1/messagesTimeline/'
-      +userId.toString()+'?nbDeMessages='+nb.toString());
+      +userId.toString()+'?nbDeMessages='+nb.toString()+'&fields=items(message%2CuserId)');
   }
 
   getMoreTweets(userId:any,min:any,max:any){
       return this.http.get('https://1-dot-webcloud-122127.appspot.com/_ah/api/messages/v1/messagesTimeline/'
-        +userId.toString()+'/min/'+min.toString()+'/max/'+max.toString())
+        +userId.toString()+'/min/'+min.toString()+'/max/'+max.toString()+'?fields=items(message%2CuserId)')
   }
 
 }
