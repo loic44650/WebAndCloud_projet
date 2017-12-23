@@ -17,7 +17,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class ApiMsgs {
 	
 	@ApiMethod(name="addMessage",httpMethod="post",path="messages")
-	public Message addMessage(Message msg){
+	public MessageIndex addMessage(Message msg){
 		PersistenceManager pm = getPersistenceManager();
 		try {
 			User usr1 = (User) pm.getObjectById(User.class,
@@ -26,7 +26,7 @@ public class ApiMsgs {
 			users.add(msg.getUserId());
 			MessageIndex msgIndex = new MessageIndex(msg,users);
 			pm.makePersistent(msgIndex);
-			return msgIndex.getMessage();
+			return msgIndex;
 		}
 		finally{
 			pm.close();

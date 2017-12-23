@@ -1,6 +1,3 @@
-/**
- * Created by demeph on 18/04/2017.
- */
 import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {UserService} from "../../services/User/user.services";
 import {getRandomString} from "selenium-webdriver/safari";
@@ -10,6 +7,10 @@ import {TwittsService} from "../../services/Twitts/twitts.service";
 import {jsonpFactory} from "@angular/http/src/http_module";
 import {Router} from "@angular/router";
 import {DatePipe} from "@angular/common";
+
+export class msg{
+  message : Message;
+}
 
 @Component({
     moduleId:module.id,
@@ -29,6 +30,7 @@ export class DashboardComponent implements OnInit{
     getTimeline = null;
     nbMessage = 15;
     min = 0;
+    timeMs = 0;
     constructor(
       private userS : UserService,
       private twitS : TwittsService,
@@ -52,6 +54,7 @@ export class DashboardComponent implements OnInit{
     writeTwett(){
         this.desactiver = false;
         if (this.message.msg) {
+          let msg1 = new msg();
           this.tweet = new Message(this.message.msg,4843829756690432);
           this.message.msg = null;
           console.log(this.tweet);
@@ -60,9 +63,9 @@ export class DashboardComponent implements OnInit{
             complete => {
               let datefin = new Date().getTime();
               console.log(complete.json());
-              let message = new Message(complete.json().message,complete.json().userId);
-              message.time = (datefin-dateDeb);
-              this.lesMessages.unshift(message);
+              let message = new msg();
+              this.lesMessages.unshift(complete.json());
+              this.timeMs = datefin-dateDeb;
             },
             err => console.log(err)
           );
