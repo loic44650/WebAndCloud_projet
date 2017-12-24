@@ -30,7 +30,6 @@ export class AuthenticationService {
       console.log(username);
       console.log(password);
       if (username = this.model.email){
-          console.log('fuck');
           if (password = this.model.pass) {
             localStorage.setItem('user', JSON.stringify({username : username}));
             return true;
@@ -61,22 +60,6 @@ export class AuthenticationService {
     }
 
     logout() {
-       /* let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if(currentUser){
-            let headers = new Headers({ 'X-Auth-Token': currentUser.token,'Access-Control-Allow-Origin': '*' });
-            let options = new RequestOptions({ headers: headers });
-            let id = currentUser.id;
-            this.token = null;
-            console.log(localStorage.length);
-            localStorage.clear();
-            console.log(localStorage.length);
-            this.http.delete(adressBackEnd+"/auth-tokens/"+currentUser.id, options).subscribe(
-                complete => {
-                    console.log(id);
-                },
-                err => console.log(err),
-            );
-        }*/
        localStorage.clear();
        this.router.navigate(['/login']);
     }

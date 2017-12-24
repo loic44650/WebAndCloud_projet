@@ -1,6 +1,4 @@
-/**
- * Created by danielahmed on 17/04/2017.
- */
+
 import { Component } from '@angular/core';
 
 @Component({
@@ -12,6 +10,3 @@ import { Component } from '@angular/core';
 export class FooterComponent  {
 
 }
-/**
- * Created by danielahmed on 17/04/2017.
- */
